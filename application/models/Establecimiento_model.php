@@ -6,6 +6,33 @@ class Establecimiento_model extends CI_Model{
         parent::__construct();
     }
 
+    public function get_institucion_busqueda_select2($termino)
+    {
+        $sql= "SELECT establecimiento.*,localidades.localidad as localidades_localidad FROM establecimiento INNER JOIN localidades on localidades.codigo = establecimiento.localidad where establecimiento.id = '".$termino."' or establecimiento.nombre_organizacion like '%".$termino."%'";
+
+        $r= $this->db->query($sql);
+        $datos = $r->result_array();
+        
+        $data = Array();
+        
+        // Make sure we have a result
+        if(count($datos) > 0){
+           foreach ($datos as $value) {
+            $data[] = array('id' => $value['id'], 'text' =>$value['nombre_organizacion']);              
+           } 
+        } else {
+           $data[] = array('id' => '0', 'text' => 'Buscar institucion');
+        }
+
+        return $data;
+    }
+
+    public function get_ultimo_establecimiento()
+    {
+        $r = $this->db->query("SELECT establecimiento.*,localidades.localidad as localidades_localidad FROM establecimiento INNER JOIN localidades on localidades.codigo = establecimiento.localidad where establecimiento.id = (select max(establecimiento.id) from establecimiento)");
+        return $r->row_array();
+    }
+
     public function get_establecimientos()
     {
         $r = $this->db->query("SELECT establecimiento.*,localidades.localidad as localidades_localidad FROM establecimiento INNER JOIN localidades on localidades.codigo = establecimiento.localidad");
@@ -20,6 +47,8 @@ class Establecimiento_model extends CI_Model{
 
     public function agregar_establecimiento($nombre_organizacion,$direccion,$localidad,$telefono,$correo,$rector,$referente )
     {
+        $this->db->trans_begin();
+
         $datos = Array(
             "nombre_organizacion" => $nombre_organizacion,
             "direccion" => $direccion,
@@ -30,7 +59,23 @@ class Establecimiento_model extends CI_Model{
             "referente" => $referente, 
         );
 
-        return $this->db->insert("establecimiento",$datos);
+        $agregado = $this->db->insert("establecimiento",$datos);
+
+        if($agregado)
+        {
+            $agregado = $this->get_ultimo_establecimiento();
+        }
+
+        if($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return false;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return $agregado;
+        }
     }
 
     public function editar_establecimiento($id,$nombre_organizacion,$direccion,$localidad,$telefono,$correo,$rector,$referente )

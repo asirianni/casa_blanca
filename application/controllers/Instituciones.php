@@ -98,4 +98,14 @@ class Instituciones extends MY_Controller
 
         echo json_encode($respuesta);
     }
+
+    public function get_institucion_busqueda_select2()
+    {
+        if($this->input->is_ajax_request() && $this->session->userdata("ingresado"))
+        {
+            $respuesta = $this->Establecimiento_model->get_institucion_busqueda_select2($this->input->post("q"));
+            
+            echo json_encode($respuesta);
+        }
+    }
 } 
