@@ -24,6 +24,12 @@ class Presupuesto_model extends CI_Model{
         return $r->row_array();
     }
 
+    public function get_detalle_presupuesto($numero)
+    {
+        $r = $this->db->query("SELECT presupuesto_detalle.*,productos.descripcion as productos_descripcion FROM presupuesto_detalle LEFT JOIN productos on productos.id = presupuesto_detalle.codigo_item where presupuesto_detalle.num_presupuesto = ?",array($numero));
+        return $r->result_array();
+    }
+
     
     public function agregar_presupuesto($fecha,$fecha_llegada,$establecimiento,$usuario,$docente_a_cargo,$grado,$acompaniantes,$anio,$curso,$ciclo,$perfil,$mujeres,$varones,$total,$descuento_general,$estado,$usuarios_correo )
     {

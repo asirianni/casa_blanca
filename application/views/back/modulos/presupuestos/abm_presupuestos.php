@@ -126,7 +126,7 @@
                             <td>".$value["estado"]."</td>
                             <td>
                                 <button class='btn btn-sm btn-primary' data-toggle='tooltip' title='' data-original-title='Editar' onClick='modal_editar(".$value["numero"].")'><i class='fa fa-edit'></i></button>&nbsp;
-                                <a href='".base_rul()."index.php/Presupuestos/generar_pdf/".$value["numero"]."' class='btn btn-sm btn-info' data-toggle='tooltip' title='' data-original-title='Generar PDF' >
+                                <a target='_blank' href='".base_url()."index.php/Presupuestos/generar_pdf/".$value["numero"]."' class='btn btn-sm btn-info' data-toggle='tooltip' title='' data-original-title='Generar PDF' >
                                   <i class='fa fa-file-pdf-o'></i>
                                   </a>&nbsp;
                                 <button class='btn btn-sm btn-danger' data-toggle='tooltip' title='' data-original-title='Eliminar' onClick='modal_eliminar(".$value["numero"].")'>

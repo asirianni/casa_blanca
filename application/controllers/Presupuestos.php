@@ -131,35 +131,24 @@ class Presupuestos extends MY_Controller
 
                 if($presupuesto)
                 {
-                    /*$this->load->model("Configuracion_empresa_model");
-                    $this->load->model("Registro_de_clientes_model");
+                    $this->load->model("Presupuesto_model");
                     
-                    $output["pedido"]=$pedido;
-                    $output["detalle_pedido"]=$this->Registro_de_pedidos_model->get_detalle_pedido($numero_pedido);
-                    $output["cliente"]=$this->Registro_de_clientes_model->get_cliente($pedido["cliente"]);
-                            
-                    $output["logo"]=$this->Configuracion_empresa_model->get_configuracion(3);
-                    $output["tipo_de_inscripcion"]=$this->Configuracion_empresa_model->get_configuracion(4);
-                    $output["cuit"]=$this->Configuracion_empresa_model->get_configuracion(1);
-                    $output["ingresos_brutos"]=$this->Configuracion_empresa_model->get_configuracion(2);
-                    $output["inicio_actividad"]=$this->Configuracion_empresa_model->get_configuracion(5);*/
+                    $output["presupuesto"]=$presupuesto = $this->Presupuesto_model->get_presupuesto($numero);
+                    $output["detalle_presupuesto"]=$this->Presupuesto_model->get_detalle_presupuesto($numero);
                     
                     $this->load->library('mydompdf');
-                    $html=$this->load->view("back/modulos/registro_de_pedidos/pdf_pedido",$output,true);
+                    $html=$this->load->view("back/modulos/presupuestos/pdf_presupuesto",$output,true);
 
                         
                     $pdf = new Mydompdf('P', 'mm', 'A4', true, 'UTF-8', false);
                     $pdf->SetCreator(PDF_CREATOR);
                     $pdf->SetAuthor('Marketing Bs As');
-                    $pdf->SetTitle('Presupuesto N°'.$pedido["numero"]);
+                    $pdf->SetTitle('Presupuesto N° '.$presupuesto["numero"]);
                     $pdf->SetSubject('Presupuestos');
                     $pdf->SetKeywords('');
-                    /*$pdf->SetHeaderData("clean-logo-2-naranja.png", PDF_HEADER_LOGO_WIDTH, $cabecera, $detalle, array(0, 0, 0), array(0, 0, 0));*/
                     $pdf->setFooterData($tc = array(0, 64, 0), $lc = array(0, 64, 128));
-                    //$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
                     $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
                     $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-                    //$pdf->SetMargins(PDF_MARGIN_LEFT, 50, PDF_MARGIN_RIGHT);
                     $pdf->SetPrintHeader(false);
                     $pdf->SetPrintFooter(false);
                     $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
