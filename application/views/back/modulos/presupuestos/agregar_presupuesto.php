@@ -576,8 +576,10 @@ function generar_html_tabla_listado()
           var precio =arreglo_detalles[i]["precio"];
           var descuento =arreglo_detalles[i]["descuento"];
 
+
           var sub_total= cantidad * precio;
-          var total= (cantidad * precio) - ((cantidad * descuento) / 100);
+          var descuento_en_pesos= (cantidad * precio) * descuento / 100;
+          var total= (cantidad * precio) - descuento_en_pesos;
 
           suma_sub_totales+= sub_total;
           suma_totales+=total;
@@ -586,7 +588,7 @@ function generar_html_tabla_listado()
           html+="<td><textarea rows='1' cols='30' id='descripcion_"+id_tr+"' onChange='cambio_valor("+id_tr+")'>"+descripcion+"</textarea></td>";
           html+="<td><input type='text' id='cantidad_"+id_tr+"' value='"+cantidad+"' onChange='cambio_valor("+id_tr+")'></td>";
           html+="<td><input type='text' id='precio_"+id_tr+"' value='"+precio+"' onChange='cambio_valor("+id_tr+")'></td>";
-          html+="<td><input type='text' id='id='descuento_"+id_tr+"'' value='"+descuento+"' onChange='cambio_valor("+id_tr+")'></td>";
+          html+="<td><input type='text' id='descuento_"+id_tr+"' value='"+descuento+"' onChange='cambio_valor("+id_tr+")'></td>";
           
           html+="<td style='font-weight: bold;' id='subtotal_"+id_tr+"'>$"+sub_total.toFixed(2)+"</td>";
           html+="<td style='font-weight: bold;' id='total_"+id_tr+"'>$"+total.toFixed(2)+"</td>";
@@ -637,12 +639,10 @@ function verificar_descripciones_vacias()
   return respuesta;
 }
 
- function cambio_valor(id_tr)
+function cambio_valor(id_tr)
 {
   var i= get_posicion_codigo_en_arreglo(id_tr);
    
-
-  var cod_servicio =arreglo_detalles[i]["cod_servicio"];
   var descripcion =$("#descripcion_"+id_tr).val();
   descripcion = $.trim(descripcion);
   
@@ -653,22 +653,34 @@ function verificar_descripciones_vacias()
   var precio = $("#precio_"+id_tr).val();
   precio = precio.replace(",",".");
   precio= parseFloat(precio);
+
+  var descuento = $("#descuento_"+id_tr).val();
+  descuento = descuento.replace(",",".");
+  descuento= parseFloat(descuento);
   
   if(isNaN(cantidad))
   {
       cantidad=arreglo_detalles[i]["cantidad"];
   }
+
   if(isNaN(precio))
   {
       precio=arreglo_detalles[i]["precio"];
   }
+
+  if(isNaN(descuento))
+  {
+      descuento=arreglo_detalles[i]["descuento"];
+  }
   
-  var total = precio*cantidad;
-  
-  arreglo_detalles[i]["cod_servicio"]=cod_servicio;
+  var descuento_en_pesos=((precio*cantidad) * descuento / 100);
+  var total = (precio*cantidad) - descuento_en_pesos;
+
   arreglo_detalles[i]["descripcion"]=descripcion;
   arreglo_detalles[i]["cantidad"]=cantidad;
   arreglo_detalles[i]["precio"]=precio;
+  arreglo_detalles[i]["descuento"]=descuento;
+  arreglo_detalles[i]["subtotal"]= (precio*cantidad);
   arreglo_detalles[i]["total"]=total;
   
   generar_html_tabla_listado();
