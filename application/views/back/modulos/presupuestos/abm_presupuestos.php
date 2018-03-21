@@ -136,7 +136,7 @@
                             <td>".$value["total"]."</td>
                             <td>".$value["estado"]."</td>
                             <td>
-                                <a href='".base_url()."index.php/Presupuestos/editar/".$value["numero"]."' class='btn btn-sm btn-primary' data-toggle='tooltip' title='' data-original-title='Editar' onClick='modal_editar(".$value["numero"].")'><i class='fa fa-edit'></i></a>&nbsp;
+                                <a href='".base_url()."index.php/Presupuestos/editar/".$value["numero"]."' class='btn btn-sm btn-primary' data-toggle='tooltip' title='' data-original-title='Editar'><i class='fa fa-edit'></i></a>&nbsp;
                                 <a target='_blank' href='".base_url()."index.php/Presupuestos/generar_pdf/".$value["numero"]."' class='btn btn-sm btn-info' data-toggle='tooltip' title='' data-original-title='Generar PDF' >
                                   <i class='fa fa-file-pdf-o'></i>
                                   </a>&nbsp;
