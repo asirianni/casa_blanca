@@ -54,13 +54,8 @@ class Presupuestos extends MY_Controller
             {
                 $respuesta = false;
 
-                $nombre_organizacion = $this->input->post("nombre_organizacion");
-                $direccion = $this->input->post("direccion");
-                $localidad = $this->input->post("localidad");
-                $telefono = $this->input->post("telefono");
-                $correo = $this->input->post("correo");
-                $rector = $this->input->post("rector");
-                $referente = $this->input->post("referente");
+                $fecha = $this->input->post("fecha");
+                $establecimiento = $this->input->post("establecimiento");
 
                 $respuesta = $this->Presupuesto_model->agregar_presupuesto($fecha,$fecha_llegada,$establecimiento,$usuario,$docente_a_cargo,$grado,$acompaniantes,$anio,$curso,$ciclo,$perfil,$mujeres,$varones,$total,$descuento_general,$estado,$usuarios_correo );
 
@@ -68,6 +63,9 @@ class Presupuestos extends MY_Controller
             }
             else
             {
+                $this->load->model("Producto_model");
+                $this->load->model("Rubro_model");
+
                 $output["css"]=$this->adminlte->get_css_datatables();
                 $output["css"].=$this->adminlte->get_css_select2();
                 $output["css"].=$this->adminlte->get_css_datetimepicker();
@@ -80,6 +78,9 @@ class Presupuestos extends MY_Controller
                 $output["footer"]=$this->adminlte->getFooter();
                 
                 $output["numero_proximo"]= $this->Presupuesto_model->get_proximo_numero();
+
+                $output["productos"]= $this->Producto_model->get_productos_visibles();
+                $output["rubros"]= $this->Rubro_model->get_rubros_visibles();
                 
                 $this->load->view("back/modulos/presupuestos/agregar_presupuesto",$output);
             }

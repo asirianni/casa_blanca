@@ -67,7 +67,7 @@ class Rubros extends MY_Controller
             }
         }
     }
-    
+
     public function agregar_rubro()
     {
         if($this->funciones_generales->dar_permiso_a_modulo(Modulos::CONFIGURACION))

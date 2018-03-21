@@ -93,11 +93,11 @@
                             <input type="text" class="form-control" id="numero" value="<?php echo $numero_proximo?>" disabled>
                         </div>
                         <div class="col-md-2">
-                            <label>Fecha</label>
+                            <label>Fecha *</label>
                             <input type="text" class="form-control datetimepicker"  id="fecha" value="<?php echo Date("Y-m-d")?>" readonly="" style="background-color: #fff;">
                         </div>
                         <div class="col-md-6">
-                            <label>Institucion</label>
+                            <label>Institucion *</label>
                             <select class="form-control"  id="establecimiento" style="width: 100% !important;">
                             </select>
                         </div>
@@ -134,9 +134,9 @@
             <div class="col-md-12 marco">
                 <div class="col-md-12 fila">
                     <span><strong>DETALLES DE PRESUPUESTO</strong></span> 
-                    <button class="btn btn-primary disabled" id='btn_agregar_producto_detalle' onClick="ver_modal_lista_productos()"><i class="fa fa-plus"></i> Rubro</button>
-                    <button class="btn btn-primary disabled" id="btn_asociar_pedido"><i class="fa fa-plus"></i> Producto</button>
-                    <button class="btn btn-primary disabled" id="btn_agregar_producto_detalle_vacio" onclick="agregar_detalle_vacio()"><i class="fa fa-plus"></i> Agregar vacio</button>        
+                    <button class="btn btn-primary" onclick="ver_modal_lista_rubros()"><i class="fa fa-plus"></i> Rubro</button>
+                    <button class="btn btn-primary" onclick="ver_modal_lista_productos()"><i class="fa fa-plus"></i> Producto</button>
+                    <button class="btn btn-primary" onclick="agregar_detalle_vacio()"><i class="fa fa-plus"></i> Agregar vacio</button>        
                 </div>
                 <div class="col-md-12 fila">
                     <div class="box">
@@ -146,7 +146,6 @@
                             <table id="tabla_listado" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <th style='display: none;'>Codigo</th>
                                         <th>Descripcion</th>
                                         <th>Cantidad</th>
                                         <th>Precio</th>
@@ -169,7 +168,7 @@
             <div class="col-md-offset-6 col-md-6">
                 <div class="marco" style="font-size: 18px;">
                     <p>SUB-TOTAL: $<span id='subtotal'>0</span></p>
-                    <p>DESC. GRAL: <input type="number"  class=""  id="descuento_general" value="" onChange='generar_html_tabla_listado()' disabled> -$<span id="pesos_de_descuento">0</span></p>
+                    <p>DESC. GRAL: <input type="number"  class=""  id="descuento_general" value="" onChange='generar_html_tabla_listado()'> -$<span id="pesos_de_descuento">0</span></p>
                     <!--<p>IMPUESTOS: $<span id='impuestos'>0</span></p>-->
                     <p>TOTAL: $<span id='total'>0</span></p>
                     <label>ESTADO FACTURA:</label>
@@ -186,18 +185,28 @@
                       </div>
 
                       <div class="col-md-6">
-                        <label>Grado</label>
-                        <input type="text" class="form-control" name="grado" id="grado">
-                      </div>
-
-                      <div class="col-md-6">
                         <label>Acompañante</label>
                         <input type="text" class="form-control" name="acompaniante" id="acompaniante">
                       </div>
 
                       <div class="col-md-6">
+                        <label>Grado</label>
+                        <input type="text" class="form-control" name="grado" id="grado">
+                      </div>
+
+                      <div class="col-md-6">
                         <label>Año</label>
                         <input type="text" class="form-control" name="anio" id="anio">
+                      </div>
+
+                      <div class="col-md-6">
+                        <label>Curso</label>
+                        <input type="text" class="form-control" name="curso" id="curso">
+                      </div>
+
+                      <div class="col-md-6">
+                        <label>Ciclo</label>
+                        <input type="text" class="form-control" name="ciclo" id="ciclo">
                       </div>
 
                       <div class="col-md-6">
@@ -290,31 +299,141 @@
     </div><!-- /.modal-dialog -->
 </div>
 
-
-
-<!-- // FIN EDITADO -->
-
-<div class="modal modal-default modal_eliminar" id="modal_eliminar">
-    <div class="modal-dialog modal-sm">
+<div class="modal modal-default modal_agregar" id="modal_agregar_producto">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">Eliminar Presupuesto:</h4>
+                <h4 class="modal-title">Agregar Producto:</h4>
             </div>
             <div class="modal-body">
                 
-                <p>¿Desea eliminar el presupuesto seleccionado?</p>
+                <div class="col-md-12">
+                  <table id="listado_productos" class="table table-bordered table-hover" style="text-align: center;">
+                    <thead>
+                      <tr >
+                        <th>Descripcion</th>
+                        <th>Precio</th>
+                        <th style="width: 15px !important;">Controles</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php foreach ($productos as $value)
+                      { 
+                        echo "
+                        <tr>
+                            <td>".$value["descripcion"]."</td>
+                            <td>".$value["precio"]."</td>
+                            <td style='width: 15px !important;'>
+                                <button class='btn btn-sm btn-primary' data-toggle='tooltip' title='' data-original-title='Agregar' onClick='agregar_detalle_producto(".$value["id"].")'>
+                                    <i class='fa fa-plus'></i>
+                                </button>&nbsp;";
+                                
+                        echo "</td>
+                        </tr>";
+                      }?>
+                    </tbody>
+                  </table>
+                </div>
                 <div class="clearfix"></div>
             </div>
             <div class="modal-footer">
-              <button class="btn btn-sm btn-default pull-left" onCLick="$('#modal_eliminar').modal('hide')"><i class="fa fa-close"></i> Cancelar</button>
-              <button class="btn btn-sm btn-danger pull-right" onCLick="eliminar()">
-                <i class="fa fa-trash-o"></i> Eliminar
-              </button>
+              <button class="btn btn-sm btn-default pull-left" onCLick="$('#modal_agregar_producto').modal('hide')"><i class="fa fa-close"></i> Cancelar</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
+
+<div class="modal modal-default modal_agregar" id="modal_agregar_rubro">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Agregar Rubro:</h4>
+            </div>
+            <div class="modal-body">
+                
+                <div class="col-md-12">
+                  <table id="listado_rubros" class="table table-bordered table-hover" style="text-align: center;">
+                    <thead>
+                      <tr>
+                        <th>RUBRO</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php foreach ($rubros as $value)
+                      {
+                        echo "
+                        <tr>
+                            <td><span id='rubro_".$value["id"]."'>".$value["rubro"]."</span></td>
+                            <td>
+                                <button class='btn btn-sm btn-primary' data-toggle='tooltip' title='' data-original-title='Agregar' onCLick='agregar_detalle_rubro(".$value["id"].")'><i class='fa fa-plus'></i></button>";
+                                
+                      echo "</td>
+                        </tr>";
+                      }?>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-sm btn-default pull-left" onCLick="$('#modal_agregar_rubro').modal('hide')"><i class="fa fa-close"></i> Cancelar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div class="modal modal-danger" id="modal_imprimir_presupuesto">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Imprimir</h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" style='text-align: center;'>
+                        <p style="color: #fff;font-weight: bold;font-size: 17px;">¿Desea imprimir la presupuesto?</p>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+        <div class="modal-footer">
+           <div class="col-md-12" style="text-align: center;">
+              <button class="btn btn-outline" onClick="procesar();"><i class='fa fa-close'></i> No</button>
+              <button class="btn btn-outline" onClick="si_imprimir();"><i class='fa fa-print'></i> Si</button>
+           </div>
+       </div>
+    </div><!-- /.modal-dialog -->
+</div>
+
+
+<div class="modal modal-danger" id="modal_guardar_presupuesto">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Guardar</h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" style='text-align: center;'>
+                        <p style="color: #fff;font-weight: bold;font-size: 17px;">¿Desea guardar la presupuesto?</p>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+        <div class="modal-footer">
+           <div class="col-md-12" style="text-align: center;">
+                <button class="btn btn-outline" onClick="$('#modal_guardar_presupuesto').modal('hide');"><i class='fa fa-close'></i> No</button>
+                <button class="btn btn-outline" onClick="procesar();"><i class='fa fa-save'></i> Si</button>
+           </div>
+       </div>
+    </div><!-- /.modal-dialog -->
+</div>
+
+<!-- // FIN EDITADO -->
+
 
 <!-- jQuery 2.2.3 -->
 <script src="<?php echo base_url()?>recursos/plugins/jQuery/jquery-2.1.4.min.js"></script>
@@ -361,6 +480,380 @@
 ?>
 
 <script>
+
+var productos_cargados = false;
+var arreglo_detalles = new Array();
+var id_tr=1;
+var imprimir = false;
+
+function ver_modal_lista_productos()
+{
+  $("#modal_agregar_producto").modal("show");
+}
+
+function ver_modal_lista_rubros()
+{
+  $("#modal_agregar_rubro").modal("show");
+}
+
+function agregar_detalle_vacio(){
+    var arreglo={id_tr:id_tr,codigo_es_rubro:0,codigo_item:0,descripcion:"",cantidad:1.0,precio:0.0,descuento:0.0};
+    arreglo_detalles.push(arreglo);  
+    id_tr++;
+
+    $("#btn_guardar").removeClass("disabled");
+    generar_html_tabla_listado();
+}
+
+function agregar_detalle_rubro(id){
+
+  $.ajax({
+      url: "<?php echo base_url()?>index.php/Rubros/get_rubro",
+      type: "POST",
+      data:{id:id},
+      success: function(data)
+      {
+        data= JSON.parse(data);
+
+        data=data["row"];
+              
+        var arreglo={id_tr:id_tr,codigo_es_rubro:1,codigo_item:0,descripcion:data["rubro"],cantidad:1.0,precio:data["precio"],descuento:0.0};
+        arreglo_detalles.push(arreglo);  
+        id_tr++;
+        
+        $("#btn_guardar").removeClass("disabled");
+        $("#modal_agregar_rubro").modal("hide");
+        generar_html_tabla_listado();
+      },
+      error: function(event){alert(event.responseText);
+      },
+  });
+}
+
+function agregar_detalle_producto(id){
+
+  $.ajax({
+      url: "<?php echo base_url()?>index.php/Productos/get_producto",
+      type: "POST",
+      data:{id:id},
+      success: function(data)
+      {
+        data= JSON.parse(data);
+              
+        var arreglo={id_tr:id_tr,codigo_es_rubro:1,codigo_item:0,descripcion:data["descripcion"],cantidad:1.0,precio:data["precio"],descuento:0.0};
+        arreglo_detalles.push(arreglo);  
+        id_tr++;
+        
+        $("#btn_guardar").removeClass("disabled");
+        $("#modal_agregar_producto").modal("hide");
+        generar_html_tabla_listado();
+      },
+      error: function(event){alert(event.responseText);
+      },
+  });
+}
+
+function generar_html_tabla_listado()
+{
+    var html="";
+    
+    var suma_totales = 0;
+    var suma_sub_totales= 0;
+    
+    for(var i=0; i < arreglo_detalles.length;i++)
+    {
+        
+        if(arreglo_detalles[i] != undefined)
+        {
+          var id_tr =arreglo_detalles[i]["id_tr"];
+          var descripcion =arreglo_detalles[i]["descripcion"];
+          var cantidad =arreglo_detalles[i]["cantidad"];
+          var precio =arreglo_detalles[i]["precio"];
+          var descuento =arreglo_detalles[i]["descuento"];
+
+          var sub_total= cantidad * precio;
+          var total= (cantidad * precio) - ((cantidad * descuento) / 100);
+
+          suma_sub_totales+= sub_total;
+          suma_totales+=total;
+          
+          html+="<tr id='tr_"+id_tr+"'>";
+          html+="<td><textarea rows='1' cols='30' id='descripcion_"+id_tr+"' onChange='cambio_valor("+id_tr+")'>"+descripcion+"</textarea></td>";
+          html+="<td><input type='text' id='cantidad_"+id_tr+"' value='"+cantidad+"' onChange='cambio_valor("+id_tr+")'></td>";
+          html+="<td><input type='text' id='precio_"+id_tr+"' value='"+precio+"' onChange='cambio_valor("+id_tr+")'></td>";
+          html+="<td><input type='text' id='id='descuento_"+id_tr+"'' value='"+descuento+"' onChange='cambio_valor("+id_tr+")'></td>";
+          
+          html+="<td style='font-weight: bold;' id='subtotal_"+id_tr+"'>$"+sub_total.toFixed(2)+"</td>";
+          html+="<td style='font-weight: bold;' id='total_"+id_tr+"'>$"+total.toFixed(2)+"</td>";
+          html+="<td><button class='btn btn-sm btn-danger' onClick='eliminar_registro("+id_tr+")'><i class='fa fa-trash-o'></i></button></td>";
+          html+="</tr>";
+        }
+    }
+    
+    $("#subtotal").text(suma_sub_totales.toFixed(2));
+
+    var descuento_general = parseFloat($("#descuento_general").val());
+
+    if(isNaN(descuento_general)){descuento_general=0;}
+    
+    suma_totales = suma_totales - ((suma_totales * descuento_general) / 100);
+
+    $("#total").text((suma_totales).toFixed(2));
+    $("#cuerpo_tabla_listado").html(html);
+    
+    verificar_descripciones_vacias();
+ }
+
+function verificar_descripciones_vacias()
+{
+    for(var i=0; i < arreglo_detalles.length;i++)
+    {
+        if(arreglo_detalles[i] != undefined)
+        {
+            var id_tr = arreglo_detalles[i]["id_tr"];
+
+            var descripcion = $("#descripcion_"+id_tr).val();
+            descripcion = $.trim(descripcion);
+
+            if(descripcion == "")
+            {
+                activar_error_input("descripcion_"+id_tr);
+            }
+            else
+            {
+                desactivar_error_input("descripcion_"+id_tr);
+            }
+        }
+    }
+}
+
+ function cambio_valor(id_tr)
+{
+  var i= get_posicion_codigo_en_arreglo(id_tr);
+   
+
+  var cod_servicio =arreglo_detalles[i]["cod_servicio"];
+  var descripcion =$("#descripcion_"+id_tr).val();
+  descripcion = $.trim(descripcion);
+  
+  var cantidad = $("#cantidad_"+id_tr).val();
+  cantidad = cantidad.replace(",",".");
+  cantidad = parseFloat(cantidad);
+  
+  var precio = $("#precio_"+id_tr).val();
+  precio = precio.replace(",",".");
+  precio= parseFloat(precio);
+  
+  if(isNaN(cantidad))
+  {
+      cantidad=arreglo_detalles[i]["cantidad"];
+  }
+  if(isNaN(precio))
+  {
+      precio=arreglo_detalles[i]["precio"];
+  }
+  
+  var total = precio*cantidad;
+  
+  arreglo_detalles[i]["cod_servicio"]=cod_servicio;
+  arreglo_detalles[i]["descripcion"]=descripcion;
+  arreglo_detalles[i]["cantidad"]=cantidad;
+  arreglo_detalles[i]["precio"]=precio;
+  arreglo_detalles[i]["total"]=total;
+  
+  generar_html_tabla_listado();
+}
+
+function get_posicion_codigo_en_arreglo(id_tr)
+{
+    var i=0;
+    var valor = -1;
+    
+    while( i < arreglo_detalles.length)
+    {
+        if(arreglo_detalles[i] != undefined)
+        {
+            if(arreglo_detalles[i]["id_tr"] == id_tr)
+            {
+                valor = i;
+                i= arreglo_detalles.length;
+            }
+        }
+        i++;
+    }
+    
+    return valor;
+}
+
+function eliminar_registro(id_tr)
+{
+  var posicion = get_posicion_codigo_en_arreglo(id_tr);
+        
+  delete arreglo_detalles[posicion];
+
+  ccleaner_arreglo_detalle();
+  
+  if(arreglo_detalles.length <= 0)
+  {
+    $("#btn_guardar").addClass("disabled");
+  }
+  else
+  {
+    $("#btn_guardar").removeClass("disabled");
+  }
+
+  generar_html_tabla_listado();
+}
+
+function ccleaner_arreglo_detalle()
+{
+    var aux=new Array();
+    
+    for(var i=0; i < arreglo_detalles.length;i++)
+    {
+        if(arreglo_detalles[i] != undefined)
+        {
+            aux.push(arreglo_detalles[i]);
+        }
+    }
+    
+    arreglo_detalles=aux;
+}
+
+function abrir_modal_guardar()
+{
+  $('#modal_imprimir_presupuesto').modal('show');
+}
+
+function no_imprimir()
+{
+    imprimir= false;
+    $("#modal_imprimir_presupuesto").modal("hide");
+    $("#modal_guardar_presupuesto").modal("show");
+}
+function si_imprimir()
+{
+    imprimir=true;
+    $("#modal_imprimir_presupuesto").modal("hide");
+    guardar();
+}
+
+function procesar()
+{
+   
+  ccleaner_arreglo_detalle();
+  
+  var fecha = $("#fecha").val();
+  var establecimiento = $("#establecimiento").val();
+
+  var fecha_llegada = $("#fecha_llegada").val();
+  var direccion = $("#direccion").val();
+  var localidad = $("#localidad").val();
+  var docente_a_cargo = $("#docente_a_cargo").val();
+  var grado = $("#grado").val();
+  var acompaniante = $("#acompaniante").val();
+  var anio = $("#anio").val();
+  var mujeres = $("#mujeres").val();
+  var varones = $("#varones").val();
+  var perfil = $("#observaciones").val();
+  var curso = $("#curso").val();
+  var ciclo = $("#ciclo").val();
+  
+  
+  if(validar_procesar())
+  {
+    $.ajax({
+        url: "<?php echo base_url()?>index.php/Presupuesto/agregar",
+        type: "POST",
+        data:{
+            fecha:fecha,
+            establecimiento:establecimiento,
+            fecha_llegada:fecha_llegada,
+            direccion:direccion,
+            localidad:localidad,
+            docente_a_cargo:docente_a_cargo,
+            grado:grado,
+            acompaniante:acompaniante,
+            anio:anio,
+            mujeres:mujeres,
+            varones:varones,
+            perfil:perfil,
+            detalle:arreglo_detalles
+        },
+        success: function(data)
+        {
+           data= JSON.parse(data);
+                
+            if(data > 0)
+            {
+              if(imprimir)
+              {
+                alert("imprimir");
+              }
+              else
+              {
+                alert("no imprimir");
+              }
+            }
+            else
+            {
+              alert("No se ha podido agregar");
+            }
+        },
+        error: function(event){alert(event.responseText);
+        },
+    });
+  }
+}
+
+function validar_procesar()
+{
+  var respuesata = false;
+
+  var fecha = $("#fecha").val();
+  var establecimiento = $("#establecimiento").val();
+
+  if(arreglo_detalles.length == 0)
+  {
+    respuesta=false;
+    alert("El presupuesto no tiene ningun detalle agregado");
+  }
+
+  if(fecha == "")
+  {
+    activar_error("label_fecha");
+    respuesta= false;
+  }
+  else
+  {
+    desactivar_error("label_fecha");
+  }
+
+  if(establecimiento == "")
+  {
+    activar_error("label_establecimiento");
+    respuesta= false;
+  }
+  else
+  {
+    desactivar_error("label_establecimiento");
+  }
+
+  return respuesta;
+}
+
+function activar_error_input(id)
+{
+    $("#"+id).css("border-width","2px");
+    $("#"+id).css("border-style","solid");
+    $("#"+id).css("border-color","#dd4b39");
+}
+
+function desactivar_error_input(id)
+{
+    $("#"+id).css("border-width","0px");
+}
+
 $(document).ready(function(){
   $("#establecimiento").select2({        
     ajax: {
@@ -444,6 +937,24 @@ $(document).ready(function(){
          timepicker:false,
 
          format:'Y-m-d'
+    });
+
+    $("#listado_productos").DataTable({
+      "paging": true,
+      "lengthChange": true,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": true
+    });
+
+    $("#listado_rubros").DataTable({
+      "paging": true,
+      "lengthChange": true,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": true
     });
 
 });

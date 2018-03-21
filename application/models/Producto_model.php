@@ -12,6 +12,12 @@ class Producto_model extends CI_Model{
         return $r->result_array();
     }
 
+    public function get_productos_visibles()
+    {
+        $r = $this->db->query("select productos.*,rubro.rubro as rubro_rubro from productos LEFT JOIN rubro on rubro.id = productos.rubro where productos.mostrar = 'si'");
+        return $r->result_array();
+    }
+
     public function get_producto($id)
     {
         $r = $this->db->query("select productos.*,rubro.rubro as rubro_rubro from productos LEFT JOIN rubro on rubro.id = productos.rubro where productos.id = ?",array($id));
