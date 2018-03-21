@@ -33,7 +33,7 @@
             </p>
             <form action="<?php echo base_url()?>index.php/Login" method="post">
                 <div class="form-group has-feedback">
-                    <input type="text" name="usuario_correo" class="form-control" placeholder="Correo o Usuario">
+                    <input type="text" name="usuario_correo" class="form-control" placeholder="Correo">
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback">

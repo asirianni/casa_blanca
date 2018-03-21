@@ -20,15 +20,6 @@ class Login extends CI_Controller
         $this->titulo_login = $this->Configuraciones_model->get_titulo_login();
         
     }
-    
-    public function prueba()
-    {
-        $this->load->library("Md5");
-
-        $md5 = new Md5();
-
-        echo $md5->cifrar("123mario");
-    }
 
     public function index()
     {
@@ -56,8 +47,7 @@ class Login extends CI_Controller
             
             $usuario_response = null;
 
-            
-            if($usuario_correo != "" && $password != "")
+            if(Correo::validar_correo($usuario_correo) != "" && $password != "")
             {
                 $usuario_response= $this->Usuario_model->get_usuario_inicio_sesion_con_correo($usuario_correo,$password);
                 
@@ -96,38 +86,23 @@ class Login extends CI_Controller
                                 $this->load->view("login/iniciar_sesion",$salida);
                             }
                         }
-                        else
-                        {
-                            $user_error = $this->Usuario_model->get_usuario_con_usuario($usuario_correo);
-
-                            if($user_error)
-                            {
-                                $salida["mensajes_error"][0]="La contraseña ingresada no es correcta";
-                                $this->load->view("login/iniciar_sesion",$salida);
-                            }
-                            else
-                            {
-                                $salida["mensajes_error"][0]="El usuario ingresado no esta registrado";
-                                $this->load->view("login/iniciar_sesion",$salida);
-                            }
-                        }
                     }
                 }
             }
             else
             {
-                if($usuario_correo == "" && $password == "")
+                if(Correo::validar_correo($usuario_correo) && $password == "")
                 {
-                    $salida["mensajes_error"][0]="Por favor ingrese un usuario o correo valido";
+                    $salida["mensajes_error"][0]="Por favor ingrese correo valido";
                     $salida["mensajes_error"][1]="Por favor ingrese una contraseña";
                 }
                 else
                 {
-                    if($usuario_correo == "")
+                    if(Correo::validar_correo($usuario_correo))
                     {
-                        $salida["mensajes_error"][0]="Por favor ingrese un usuario o correo valido";
+                        $salida["mensajes_error"][0]="Por favor ingrese un correo valido";
                     }
-                    else
+                    else if($password == "")
                     {
                         $salida["mensajes_error"][0]="Por favor ingrese una contraseña";
                     }

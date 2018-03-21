@@ -65,7 +65,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Agregar Presupuesto
+        Editar Presupuesto
         <!--<small>Control panel</small>-->
       </h1>
       <ol class="breadcrumb">
@@ -93,15 +93,25 @@
                     <div class="col-md-12">
                         <div class="col-md-2">
                             <label>Numero</label>
-                            <input type="text" class="form-control" id="numero" value="<?php echo $numero_proximo?>" disabled>
+                            <input type="text" class="form-control" id="numero" value="<?php echo $presupuesto["numero"]?>" disabled>
                         </div>
                         <div class="col-md-2">
                             <label id="label_fecha">Fecha *</label>
-                            <input type="text" class="form-control datetimepicker"  id="fecha" value="<?php echo Date("Y-m-d")?>" readonly="" style="background-color: #fff;">
+                            <input type="text" class="form-control datetimepicker"  id="fecha" value="<?php echo $presupuesto["fecha"]?>" readonly="" style="background-color: #fff;">
                         </div>
                         <div class="col-md-6">
                             <label id="label_establecimiento">Institucion *</label>
                             <select class="form-control"  id="establecimiento" style="width: 100% !important;">
+                              <?php
+                                if($institucion)
+                                {
+                                  echo "<option value='".$institucion["id"]."'>".$institucion["nombre_organizacion"]."</option>";
+                                }
+                                else
+                                {
+                                  echo "<option value='0'></option>";
+                                }
+                              ?>
                             </select>
                         </div>
                         <div class="col-md-2">
@@ -116,15 +126,25 @@
                 <div class="col-md-offset-2 col-md-10">
                   <div class="col-md-2">
                       <label>Fecha llegada</label>
-                      <input type="text" class="form-control datetimepicker" id="fecha_llegada"  readonly="" style="background-color: #fff;">
+                      <input type="text" class="form-control datetimepicker" id="fecha_llegada"  readonly="" style="background-color: #fff;" value="<?php echo $presupuesto["fecha_llegada"]?>">
                   </div>
                   <div class="col-md-5">
                       <label>Direccion</label>
-                      <input type="text" class="form-control"  id="direccion">
+                      <input type="text" class="form-control"  id="direccion" value="<?php echo $presupuesto["direccion"]?>">
                   </div>
                   <div class="col-md-5">
                       <label>Localidad</label>
                       <select class="form-control"  id="localidad" style="width: 100% !important;">
+                        <?php
+                        if($localidad)
+                        {
+                          echo "<option value='".$localidad["codigo"]."'>".$localidad["localidad"]."</option>";
+                        }
+                        else
+                        {
+                          echo "<option value='0'></option>";
+                        }
+                      ?>
                       </select>
                   </div>
               </div>
@@ -171,61 +191,73 @@
             <div class="col-md-offset-6 col-md-6">
                 <div class="marco" style="font-size: 18px;">
                     <p>SUB-TOTAL: $<span id='subtotal'>0</span></p>
-                    <p>DESC. GRAL: <input type="number"  class=""  id="descuento_general" value="" onChange='generar_html_tabla_listado()'> -$<span id="pesos_de_descuento">0</span></p>
+                    <p>DESC. GRAL: <input type="number"  class=""  id="descuento_general" value="<?php echo $presupuesto["descuento_general"] ?>" onChange='generar_html_tabla_listado()'> -$<span id="pesos_de_descuento">0</span></p>
                     <!--<p>IMPUESTOS: $<span id='impuestos'>0</span></p>-->
-                    <p>TOTAL: $<span id='total'>0</span></p>
+                    <p>TOTAL: $<span id='total'><?php echo $presupuesto["total"] ?></span></p>
                     <label>ESTADO:</label>
                     <select id="estado">
-                        <option value="pendiente">pendiente</option>
-                        <option value="cumplido">cumplido</option>
-                        <option value="anulado">anulado</option>
-                        <option value="eliminado">eliminado</option>
+                      <?php
+                        $estados = array("pendiente","cumplido","anulado","eliminado");
+
+                        for($i=0; $i < count($estados);$i++)
+                        {
+                          if($presupuesto["estado"] == $estados[$i])
+                          {
+                            echo "<option value='".$estados[$i]."' selected>".$estados[$i]."</option>";
+                          }
+                          else
+                          {
+                            echo "<option value='".$estados[$i]."'>".$estados[$i]."</option>";
+                          }
+                        }
+
+                      ?>
                     </select>
                     <br><br>
 
                     <div style="font-size: 12px;">
                       <div class="col-md-6">
                         <label>Docente</label>
-                        <input type="text" class="form-control" name="docente_a_cargo" id="docente_a_cargo">
+                        <input type="text" class="form-control" name="docente_a_cargo" id="docente_a_cargo" value="<?php echo $presupuesto["docente_a_cargo"]?>">
                       </div>
 
                       <div class="col-md-6">
                         <label>Acompañante</label>
-                        <input type="text" class="form-control" name="acompaniante" id="acompaniante">
+                        <input type="text" class="form-control" name="acompaniante" id="acompaniante" value="<?php echo $presupuesto["acompaniantes"]?>">
                       </div>
 
                       <div class="col-md-6">
                         <label>Grado</label>
-                        <input type="text" class="form-control" name="grado" id="grado">
+                        <input type="text" class="form-control" name="grado" id="grado" value="<?php echo $presupuesto["grado"]?>">
                       </div>
 
                       <div class="col-md-6">
                         <label>Año</label>
-                        <input type="text" class="form-control" name="anio" id="anio">
+                        <input type="text" class="form-control" name="anio" id="anio" value="<?php echo $presupuesto["anio"]?>">
                       </div>
 
                       <div class="col-md-6">
                         <label>Curso</label>
-                        <input type="text" class="form-control" name="curso" id="curso">
+                        <input type="text" class="form-control" name="curso" id="curso" value="<?php echo $presupuesto["curso"]?>">
                       </div>
 
                       <div class="col-md-6">
                         <label>Ciclo</label>
-                        <input type="text" class="form-control" name="ciclo" id="ciclo">
+                        <input type="text" class="form-control" name="ciclo" id="ciclo" value="<?php echo $presupuesto["ciclo"]?>">
                       </div>
 
                       <div class="col-md-6">
                         <label>Mujeres</label>
-                        <input type="number" class="form-control" name="mujeres" id="mujeres">
+                        <input type="number" class="form-control" name="mujeres" id="mujeres" value="<?php echo $presupuesto["mujeres"]?>">
                       </div>
 
                       <div class="col-md-6">
                         <label>Varones</label>
-                        <input type="number" class="form-control" name="varones" id="varones">
+                        <input type="number" class="form-control" name="varones" id="varones" value="<?php echo $presupuesto["varones"]?>">
                       </div>
 
                       <p>Perfil / Observaciones:</p>
-                      <textarea id="observaciones" class="form-control"></textarea>
+                      <textarea id="observaciones" class="form-control"><?php echo $presupuesto["perfil"]?></textarea>
                     </div>
                     
                     <p style="text-align: center;margin-top: 20px;">
@@ -777,9 +809,10 @@ function procesar()
   if(validar_procesar() && verificar_descripciones_vacias())
   {
     $.ajax({
-        url: "<?php echo base_url()?>index.php/Presupuestos/agregar",
+        url: "<?php echo base_url()?>index.php/Presupuestos/editar",
         type: "POST",
         data:{
+            numero_presupuesto:<?php echo $presupuesto["numero"]?>,
             fecha:fecha,
             establecimiento:establecimiento,
             fecha_llegada:fecha_llegada,
@@ -877,6 +910,65 @@ function desactivar_error_input(id)
 }
 
 $(document).ready(function(){
+
+<?php
+$productos= $detalle_presupuesto["productos"];
+$rubros= $detalle_presupuesto["rubros"];
+$no_rubros_no_productos= $detalle_presupuesto["no_rubros_no_productos"];
+
+foreach ($productos as $value)
+{
+    $cantidad = (float)$value["cantidad"];
+    $unitario = (float)$value["precio"];
+
+
+    $subtotal =$unitario;
+    $total=$subtotal*$cantidad;
+
+?>
+    var arreglo= {id_tr:id_tr,codigo_es_rubro:<?php echo $value["codigo_es_rubro"]?>,codigo_item:<?php echo $value["codigo_item"]?>,descripcion:'<?php echo $value["descripcion"]?>',cantidad:<?php echo $value["cantidad"]?>,precio:<?php echo $value["precio"]?>,descuento:<?php echo $value["descuento"]?>};
+    arreglo_detalles.push(arreglo);  
+    id_tr++;
+    $("#btn_guardar").removeClass("disabled");
+<?php } ?>
+
+<?php
+foreach ($rubros as $value)
+{
+    $cantidad = (float)$value["cantidad"];
+    $unitario = (float)$value["precio"];
+
+
+    $subtotal =$unitario;
+    $total=$subtotal*$cantidad;
+
+?>
+    var arreglo= {id_tr:id_tr,codigo_es_rubro:<?php echo $value["codigo_es_rubro"]?>,codigo_item:<?php echo $value["codigo_item"]?>,descripcion:'<?php echo $value["descripcion"]?>',cantidad:<?php echo $value["cantidad"]?>,precio:<?php echo $value["precio"]?>,descuento:<?php echo $value["descuento"]?>};
+    arreglo_detalles.push(arreglo);  
+    id_tr++;
+    $("#btn_guardar").removeClass("disabled");
+<?php } ?>
+
+<?php
+foreach ($no_rubros_no_productos as $value)
+{
+    $cantidad = (float)$value["cantidad"];
+    $unitario = (float)$value["precio"];
+
+
+    $subtotal =$unitario;
+    $total=$subtotal*$cantidad;
+
+?>
+    var arreglo= {id_tr:id_tr,codigo_es_rubro:<?php echo $value["codigo_es_rubro"]?>,codigo_item:<?php echo $value["codigo_item"]?>,descripcion:'<?php echo $value["descripcion"]?>',cantidad:<?php echo $value["cantidad"]?>,precio:<?php echo $value["precio"]?>,descuento:<?php echo $value["descuento"]?>};
+    arreglo_detalles.push(arreglo);  
+    id_tr++;
+    $("#btn_guardar").removeClass("disabled");
+<?php } ?>
+
+  
+  generar_html_tabla_listado();
+
   $("#establecimiento").select2({        
     ajax: {
         url: "<?=base_url()?>index.php/Instituciones/get_institucion_busqueda_select2",

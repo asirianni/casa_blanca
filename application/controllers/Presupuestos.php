@@ -13,6 +13,8 @@ class Presupuestos extends MY_Controller
     {
         if($this->funciones_generales->dar_permiso_a_modulo(Modulos::PRESUPUESTOS))
         {
+            $this->load->model("Establecimiento_model");
+
             $output["css"]=$this->adminlte->get_css_datatables();
             $output["css"].=$this->adminlte->get_css_select2();
             $output["css"].=$this->adminlte->get_css_datetimepicker();
@@ -24,8 +26,22 @@ class Presupuestos extends MY_Controller
             $output["menu_configuracion"]=$this->adminlte->getMenuConfiguracion();
             $output["footer"]=$this->adminlte->getFooter();
             
-            $output["presupuestos"]= $this->Presupuesto_model->get_presupuestos();
-            
+            $desde = date("Y-m")."-01";
+            $hasta = date("Y-m")."-".date("d",(mktime(0,0,0,date("m")+1,1,date("Y"))-1));
+            $institucion = 0;
+
+            if($this->input->post("desde") || $this->input->post("hasta") || $this->input->post("institucion"))
+            {
+                $desde = $this->input->post("desde");
+                $hasta = $this->input->post("hasta");
+                $institucion = $this->input->post("institucion");
+            }
+
+            $output["presupuestos"]= $this->Presupuesto_model->get_presupuestos_with_filters($desde,$hasta,$institucion);
+            $output["desde"]=$desde;
+            $output["hasta"]=$hasta;
+            $output["institucion"]=$this->Establecimiento_model->get_establecimiento($institucion);
+
             $this->load->view("back/modulos/presupuestos/abm_presupuestos",$output);
         }
         else
@@ -50,14 +66,34 @@ class Presupuestos extends MY_Controller
     {
         if($this->funciones_generales->dar_permiso_a_modulo(Modulos::PRESUPUESTOS))
         {
-             if($this->input->is_ajax_request() && $this->input->post())
+            if($this->input->is_ajax_request() && $this->input->post())
             {
                 $respuesta = false;
 
                 $fecha = $this->input->post("fecha");
                 $establecimiento = $this->input->post("establecimiento");
+                $fecha_llegada = $this->input->post("fecha_llegada");
+                $direccion = $this->input->post("direccion");
+                $localidad = $this->input->post("localidad");
+                $docente_a_cargo = $this->input->post("docente_a_cargo");
+                $grado = $this->input->post("grado");
+                $acompaniantes = $this->input->post("acompaniante");
+                $anio = $this->input->post("anio");
+                $mujeres = $this->input->post("mujeres");
+                $varones = $this->input->post("varones");
+                $perfil = $this->input->post("perfil");
+                $detalle = $this->input->post("detalle");
+                $curso = $this->input->post("curso");
+                $ciclo = $this->input->post("ciclo");
+                $descuento_general = $this->input->post("descuento_general");
+                $estado = $this->input->post("estado");
+                $direccion = $this->input->post("direccion");
+                $localidad = $this->input->post("localidad");
 
-                $respuesta = $this->Presupuesto_model->agregar_presupuesto($fecha,$fecha_llegada,$establecimiento,$usuario,$docente_a_cargo,$grado,$acompaniantes,$anio,$curso,$ciclo,$perfil,$mujeres,$varones,$total,$descuento_general,$estado,$usuarios_correo );
+                $usuario = $this->session->userdata("id");
+               
+                
+                $respuesta = $this->Presupuesto_model->agregar_presupuesto($fecha,$fecha_llegada,$establecimiento,$usuario,$docente_a_cargo,$grado,$acompaniantes,$anio,$curso,$ciclo,$perfil,$mujeres,$varones,$descuento_general,$estado,$detalle,$direccion,$localidad);
 
                 echo json_encode($respuesta);
             }
@@ -65,6 +101,7 @@ class Presupuestos extends MY_Controller
             {
                 $this->load->model("Producto_model");
                 $this->load->model("Rubro_model");
+                $this->load->model("Configuracion_empresa_model");
 
                 $output["css"]=$this->adminlte->get_css_datatables();
                 $output["css"].=$this->adminlte->get_css_select2();
@@ -81,6 +118,7 @@ class Presupuestos extends MY_Controller
 
                 $output["productos"]= $this->Producto_model->get_productos_visibles();
                 $output["rubros"]= $this->Rubro_model->get_rubros_visibles();
+                $output["logo"]=$this->Configuracion_empresa_model->get_configuracion(3);
                 
                 $this->load->view("back/modulos/presupuestos/agregar_presupuesto",$output);
             }
@@ -88,25 +126,85 @@ class Presupuestos extends MY_Controller
     }
     
 
-    public function editar()
+    public function editar($numero_presupuesto = null)
     {
-        $respuesta = false;
-
-        if($this->input->is_ajax_request() && $this->funciones_generales->dar_permiso_a_modulo(Modulos::PRESUPUESTOS))
+        if($this->funciones_generales->dar_permiso_a_modulo(Modulos::PRESUPUESTOS))
         {
-            $id = $this->input->post("id");
-            $nombre_organizacion = $this->input->post("nombre_organizacion");
-            $direccion = $this->input->post("direccion");
-            $localidad = $this->input->post("localidad");
-            $telefono = $this->input->post("telefono");
-            $correo = $this->input->post("correo");
-            $rector = $this->input->post("rector");
-            $referente = $this->input->post("referente");
+             if($this->input->is_ajax_request() && $this->input->post())
+            {
+                $respuesta = false;
 
-            $respuesta = $this->Presupuesto_model->editar_establecimiento($id,$nombre_organizacion,$direccion,$localidad,$telefono,$correo,$rector,$referente);
+                $numero_presupuesto = $this->input->post("numero_presupuesto");
+                $fecha = $this->input->post("fecha");
+                $establecimiento = $this->input->post("establecimiento");
+                $fecha_llegada = $this->input->post("fecha_llegada");
+                $direccion = $this->input->post("direccion");
+                $localidad = $this->input->post("localidad");
+                $docente_a_cargo = $this->input->post("docente_a_cargo");
+                $grado = $this->input->post("grado");
+                $acompaniantes = $this->input->post("acompaniante");
+                $anio = $this->input->post("anio");
+                $mujeres = $this->input->post("mujeres");
+                $varones = $this->input->post("varones");
+                $perfil = $this->input->post("perfil");
+                $detalle = $this->input->post("detalle");
+                $curso = $this->input->post("curso");
+                $ciclo = $this->input->post("ciclo");
+                $descuento_general = $this->input->post("descuento_general");
+                $estado = $this->input->post("estado");
+                $direccion = $this->input->post("direccion");
+                $localidad = $this->input->post("localidad");
+
+                $usuario = $this->session->userdata("id");
+               
+                
+                $respuesta = $this->Presupuesto_model->editar_presupuesto($numero_presupuesto,$fecha,$fecha_llegada,$establecimiento,$usuario,$docente_a_cargo,$grado,$acompaniantes,$anio,$curso,$ciclo,$perfil,$mujeres,$varones,$descuento_general,$estado,$detalle,$direccion,$localidad);
+
+                echo json_encode($respuesta);
+            }
+            else
+            {
+                $presupuesto_row = $this->Presupuesto_model->get_presupuesto($numero_presupuesto);
+
+                if($presupuesto_row)
+                {
+                    $this->load->model("Producto_model");
+                    $this->load->model("Rubro_model");
+                    $this->load->model("Configuracion_empresa_model");
+                    $this->load->model("Establecimiento_model");
+                    $this->load->model("Localidades_model");
+                    
+                    $output["css"]=$this->adminlte->get_css_datatables();
+                    $output["css"].=$this->adminlte->get_css_select2();
+                    $output["css"].=$this->adminlte->get_css_datetimepicker();
+                    $output["js"]=$this->adminlte->get_js_datatables();
+                    $output["js"].=$this->adminlte->get_js_select2();
+                    $output["js"].=$this->adminlte->get_js_datetimepicker();
+                    $output["menu"]=$this->adminlte->getMenu();
+                    $output["header"]=$this->adminlte->getHeader();
+                    $output["menu_configuracion"]=$this->adminlte->getMenuConfiguracion();
+                    $output["footer"]=$this->adminlte->getFooter();
+                    
+                    $output["numero_proximo"]= $this->Presupuesto_model->get_proximo_numero();
+
+                    $output["productos"]= $this->Producto_model->get_productos_visibles();
+                    $output["rubros"]= $this->Rubro_model->get_rubros_visibles();
+                    $output["logo"]=$this->Configuracion_empresa_model->get_configuracion(3);
+                    
+
+                    $output["presupuesto"]= $this->Presupuesto_model->get_presupuesto($numero_presupuesto);
+                    $output["detalle_presupuesto"]=$this->Presupuesto_model->get_detalle_presupuesto($numero_presupuesto);
+                    $output["institucion"]=$this->Establecimiento_model->get_establecimiento($output["presupuesto"]["establecimiento"]);
+                    $output["localidad"]= $this->Localidades_model->get_localidad($output["presupuesto"]["localidad"]);
+
+                    $this->load->view("back/modulos/presupuestos/editar_presupuesto",$output);
+                }
+                else
+                {
+                    redirect("Login");
+                }
+            }
         }
-
-        echo json_encode($respuesta);
     }
 
     public function eliminar()
@@ -132,11 +230,13 @@ class Presupuestos extends MY_Controller
 
                 if($presupuesto)
                 {
-                    $this->load->model("Presupuesto_model");
+                    $this->load->model("Configuracion_empresa_model");
                     
                     $output["presupuesto"]=$presupuesto = $this->Presupuesto_model->get_presupuesto($numero);
                     $output["detalle_presupuesto"]=$this->Presupuesto_model->get_detalle_presupuesto($numero);
-                    
+                    $output["logo"]=$this->Configuracion_empresa_model->get_configuracion(3);
+                    //var_dump($output["detalle_presupuesto"]);
+
                     $this->load->library('mydompdf');
                     $html=$this->load->view("back/modulos/presupuestos/pdf_presupuesto",$output,true);
 

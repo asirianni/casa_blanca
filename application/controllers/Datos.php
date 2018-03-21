@@ -39,8 +39,41 @@ class Datos extends MY_Controller
     {
         if($this->input->is_ajax_request() && $this->funciones_generales->dar_permiso_a_modulo(Modulos::CONFIGURACION,$this->session->userdata("tipo_usuario")))
         {
-            $valor= $this->input->post("valor");
             $id= $this->input->post("id");
+            $valor= $this->input->post("valor");
+
+
+            if(isset($_FILES))
+            {
+                $respuesta = false;
+
+                // SUBIR IMAGEN 
+                $config['upload_path']          = './recursos/images/';
+                $config['allowed_types']        = 'gif|jpg|png';
+                $config['max_size']             = 100000;
+                $config['max_width']            = 3724;
+                $config['max_height']           = 3768;
+                $config["file_name"]="logo-completo";
+                $config['overwrite']= true;
+
+                $this->load->library('upload', $config);
+
+                if ( ! $this->upload->do_upload('imagen'))
+                {
+                    $error = array('error' => $this->upload->display_errors());
+                }
+                else
+                {
+                    $data = array('upload_data' => $this->upload->data());
+                    
+                    $respuesta= true;
+                }
+
+                if($respuesta)
+                {
+                   $valor=$data["upload_data"]["file_name"];
+                }
+            }
             
             $this->load->model("Configuracion_empresa_model");
             $respuesta = $this->Configuracion_empresa_model->editar_configuracion($id,$valor);

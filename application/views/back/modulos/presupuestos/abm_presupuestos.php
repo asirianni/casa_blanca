@@ -71,26 +71,37 @@
                    Filtro de busqueda:
                 </div><!-- /.box-header -->
                 <div class="box-body">
-                  <div class="col-md-2">
-                    <label>Fecha Desde</label>
-                    <input type="text" name="fecha_desde" id="fecha_desde" class="form-control datetimepicker" readonly="" style="background-color: #fff !important;">
-                  </div>
-                  <div class="col-md-2">
-                    <label>Fecha Hasta</label>
-                    <input type="text" name="fecha_hasta" id="fecha_hasta" class="form-control datetimepicker" readonly="" style="background-color: #fff !important;">
-                  </div>
-                  <div class="col-md-6">
-                    <label>Institucion</label>
-                    <select name="Institucion" id="Institucion" class="form-control">
-                      <option value="0">Todos</option>
-                    </select>
-                  </div>
-                  <div class="col-md-2">
-                    <label>&nbsp;</label>
-                    <button type="text" onClick='' class="btn btn-primary form-control">
-                      <i class="fa fa-search"></i>
-                    </button>
-                  </div>
+                  <form action="<?php echo base_url() ?>index.php/Presupuestos/abm_presupuestos" method="post">
+                    <div class="col-md-2">
+                      <label>Fecha Desde</label>
+                      <input type="text" name="desde" id="fecha_desde" class="form-control datetimepicker" readonly="" style="background-color: #fff !important;" value="<?php echo $desde ?>">
+                    </div>
+                    <div class="col-md-2">
+                      <label>Fecha Hasta</label>
+                      <input type="text" name="hasta" id="fecha_hasta" class="form-control datetimepicker" readonly="" style="background-color: #fff !important;" value="<?php echo $hasta ?>">
+                    </div>
+                    <div class="col-md-6">
+                      <label>Institucion</label>
+                      <select id="institucion" name="institucion" class="form-control">
+                        <?php
+                          if($institucion)
+                          {
+                            echo "<option value='".$institucion["id"]."'>".$institucion["nombre_organizacion"]."</option>";
+                          }
+                          else
+                          {
+                            echo "<option value='0'>Todas</option>";
+                          }
+                        ?>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <label>&nbsp;</label>
+                      <button type="text" onClick='' class="btn btn-primary form-control">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </div>
+                  </form>
 
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -125,7 +136,7 @@
                             <td>".$value["total"]."</td>
                             <td>".$value["estado"]."</td>
                             <td>
-                                <button class='btn btn-sm btn-primary' data-toggle='tooltip' title='' data-original-title='Editar' onClick='modal_editar(".$value["numero"].")'><i class='fa fa-edit'></i></button>&nbsp;
+                                <a href='".base_url()."index.php/Presupuestos/editar/".$value["numero"]."' class='btn btn-sm btn-primary' data-toggle='tooltip' title='' data-original-title='Editar' onClick='modal_editar(".$value["numero"].")'><i class='fa fa-edit'></i></a>&nbsp;
                                 <a target='_blank' href='".base_url()."index.php/Presupuestos/generar_pdf/".$value["numero"]."' class='btn btn-sm btn-info' data-toggle='tooltip' title='' data-original-title='Generar PDF' >
                                   <i class='fa fa-file-pdf-o'></i>
                                   </a>&nbsp;
@@ -288,6 +299,27 @@
 
          format:'Y-m-d'
     });
+
+    $("#institucion").select2({        
+          ajax: {
+              url: "<?=base_url()?>index.php/Instituciones/get_institucion_busqueda_select2",
+              dataType: 'json',
+              type: 'post',
+              delay: 250,
+              data: function (params) {
+                  return {
+                      q: params.term 
+                  };
+              },
+              processResults: function (data) {
+                  return {
+                      results: data
+                  };
+              },
+              cache: true
+          },
+          minimumInputLength: 1
+      });
   });
     </script>
 </body>

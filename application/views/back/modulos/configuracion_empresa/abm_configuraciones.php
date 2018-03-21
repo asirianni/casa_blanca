@@ -83,11 +83,7 @@
                                 echo    "<td>".$value["descripcion"]."</td>";
                                 echo    "<td>".$value["valor"]."</td>";
                                 echo    "<td>";
-                                if($value["codigo"]==3 || $value["codigo"]==6 ){
-                                    echo "no editable";
-                                }else{
-                                    echo "<button class='btn btn-sm btn-primary' data-toggle='tooltip' title='' data-original-title='Editar' onClick='abrir_modal_editar_configuracion(".$value["codigo"].",&#34;".$value["descripcion"]."&#34;,&#34;".$value["valor"]."&#34)'><i class='fa fa-edit'></i></button>";
-                                }
+                                echo "<button class='btn btn-sm btn-primary' data-toggle='tooltip' title='' data-original-title='Editar' onClick='abrir_modal_editar_configuracion(".$value["codigo"].",&#34;".$value["descripcion"]."&#34;,&#34;".$value["valor"]."&#34)'><i class='fa fa-edit'></i></button>";
                                 echo    "</td>";
                                 echo "</tr>";
                             }
@@ -120,20 +116,27 @@
                 <h4 class="modal-title">Editar configuracion:</h4>
             </div>
             <div class="modal-body">
-                <input type="text" id="id_editar_configuracion" hidden=""/>
-                <div class="col-md-6">
+              <form id="formulario_editar">
+                <input type="text" id="id_editar_configuracion" name="id" hidden=""/>
+                <div class="col-md-12">
                     <div class="form-group">
                         <label for="descripcion_editar_configuracion">Descripcion: </label>
-                        <input class="form-control" type="text" id="descripcion_editar_configuracion"/>
+                        <input class="form-control" type="text"  id="descripcion_editar_configuracion" readonly/>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12" id="valor_en_texto">
                     <div class="form-group">
                         <label for="valor_editar_configuracion">Valor: </label>
-                        <input class="form-control" type="text" id="valor_editar_configuracion"/>
+                        <input class="form-control" name="valor" type="text" id="valor_editar_configuracion"/>
                     </div>
                 </div>
-                
+                <div class="col-md-12" id="valor_en_imagen">
+                    <div class="form-group">
+                        <label for="valor_imagen_editar_configuracion">Imagen: </label>
+                        <input class="" name="imagen" type="file" id="valor_imagen_editar_configuracion"/>
+                    </div>
+                </div>
+                </form>
                 <div class="clearfix"></div>
             </div>
             <div class="modal-footer">
@@ -193,11 +196,22 @@
 <script> 
 function abrir_modal_editar_configuracion(codigo,descripcion,valor)
 {
-    $("#id_editar_configuracion").val(codigo);
-    $("#descripcion_editar_configuracion").val(descripcion);
+  $("#id_editar_configuracion").val(codigo);
+  $("#descripcion_editar_configuracion").val(descripcion);
+
+  if(codigo != 3)
+  {
     $("#valor_editar_configuracion").val(valor);
-    
-    $("#modal_editar_configuracion").modal("show");
+    $("#valor_en_imagen").css("display","none");
+    $("#valor_en_texto").css("display","block");
+  }
+  else
+  {
+    $("#valor_en_texto").css("display","none");
+    $("#valor_en_imagen").css("display","block");
+  }
+
+  $("#modal_editar_configuracion").modal("show");
 }
 
 function editar_configuracion()
@@ -205,37 +219,45 @@ function editar_configuracion()
     var id= $("#id_editar_configuracion").val();
     var valor= $("#valor_editar_configuracion").val();
     
-    if(valor != "")
-    {
-        $.ajax({
-            url: "<?php echo base_url()?>index.php/Datos/editar_configuracion_empresa",
-            type: "POST",
-            data:{
-                id:id,
-                valor:valor,
-             },
-            success: function(data)
-            {
-                data= JSON.parse(data);
-                
-                if(data > 0)
-                {
-                    location.href="<?php echo base_url()?>index.php/Datos/abm_datos";
-                }
-                else
-                {
-                    alert("No se ha podido agregar");
-                }
-            },
-            error: function(event){alert(event.responseText);
-            },
-        });    
+    
+    var d = $("#formulario_editar");
+    formdata = new FormData();
+    
+    // En el formdata colocamos todos los archivos que vamos a subir
+    for (var i = 0; i < (d.find('input[type=file]').length); i++) { 
+        // buscará todos los input con el valor "file" y subirá cada archivo. Serán diferenciados en el PHP gracias al "name" de cada uno.
+        formdata.append((d.find('input[type="file"]').eq(i).attr("name")),((d.find('input[type="file"]:eq('+i+')')[0]).files[0]));            
     }
-    else
-    {
-        if(valor==""){activar_error("valor_editar_configuracion");}
-        else{desactivar_error("valor_editar_configuracion");}
+            
+    for (var i = 0; i < (d.find('input').not('input[type=file]').not('input[type=submit]').length); i++) { 
+        // buscará todos los input menos el valor "file" y "sumbit . Serán diferenciados en el PHP gracias al "name" de cada uno.
+        formdata.append( (d.find('input').not('input[type=file]').not('input[type=submit]').eq(i).attr("name")),(d.find('input').not('input[type=file]').not('input[type=submit]').eq(i).val()) );            
+        formdata.append( (d.find('select').not('select[type=file]').not('select[type=submit]').eq(i).attr("name")),(d.find('select').not('select[type=file]').not('select[type=submit]').eq(i).val()) );            
+    
     }
+
+      $.ajax({
+          url: "<?php echo base_url()?>index.php/Datos/editar_configuracion_empresa",
+          type: "POST",
+          contentType: false,
+          data:formdata,
+          processData:false,
+          success: function(data)
+          {
+              data= JSON.parse(data);
+              
+              if(data > 0)
+              {
+                  location.href="<?php echo base_url()?>index.php/Datos/abm_datos";
+              }
+              else
+              {
+                  alert("No se ha podido agregar");
+              }
+          },
+          error: function(event){alert(event.responseText);
+          },
+      });
 }
 
 
