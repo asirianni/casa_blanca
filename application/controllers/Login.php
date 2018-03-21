@@ -47,6 +47,7 @@ class Login extends CI_Controller
             
             $usuario_response = null;
 
+
             if(Correo::validar_correo($usuario_correo) != "" && $password != "")
             {
                 $usuario_response= $this->Usuario_model->get_usuario_inicio_sesion_con_correo($usuario_correo,$password);
@@ -71,34 +72,33 @@ class Login extends CI_Controller
                     }
                     else
                     {
-                        if(Correo::validar_correo($usuario_correo))
-                        {
-                            $user_error = $this->Usuario_model->get_usuario_con_correo($usuario_correo);
+                        
+                        $user_error = $this->Usuario_model->get_usuario_con_correo($usuario_correo);
 
-                            if($user_error)
-                            {
-                                $salida["mensajes_error"][0]="La contraseña ingresada no es correcta";
-                                $this->load->view("login/iniciar_sesion",$salida);
-                            }
-                            else
-                            {
-                                $salida["mensajes_error"][0]="El correo ingresado no esta registrado";
-                                $this->load->view("login/iniciar_sesion",$salida);
-                            }
+                        if($user_error)
+                        {
+                            $salida["mensajes_error"][0]="La contraseña ingresada no es correcta";
+                            $this->load->view("login/iniciar_sesion",$salida);
                         }
+                        else
+                        {
+                            $salida["mensajes_error"][0]="El correo ingresado no esta registrado";
+                            $this->load->view("login/iniciar_sesion",$salida);
+                        }
+                        
                     }
                 }
             }
             else
             {
-                if(Correo::validar_correo($usuario_correo) && $password == "")
+                if(!Correo::validar_correo($usuario_correo) && $password == "")
                 {
                     $salida["mensajes_error"][0]="Por favor ingrese correo valido";
                     $salida["mensajes_error"][1]="Por favor ingrese una contraseña";
                 }
                 else
                 {
-                    if(Correo::validar_correo($usuario_correo))
+                    if(!Correo::validar_correo($usuario_correo))
                     {
                         $salida["mensajes_error"][0]="Por favor ingrese un correo valido";
                     }
