@@ -13,6 +13,8 @@ class Productos extends MY_Controller
     {
         if($this->funciones_generales->dar_permiso_a_modulo(Modulos::PRODUCTOS))
         {
+            $this->load->model("Rubro_model");
+
             $output["css"]=$this->adminlte->get_css_datatables();
             $output["css"].=$this->adminlte->get_css_select2();
             $output["js"]=$this->adminlte->get_js_datatables();
@@ -23,6 +25,7 @@ class Productos extends MY_Controller
             $output["footer"]=$this->adminlte->getFooter();
             
             $output["productos"]= $this->Producto_model->get_productos();
+            $output["rubros"]= $this->Rubro_model->get_rubros();
             
             $this->load->view("back/modulos/productos/abm_productos",$output);
         }

@@ -154,7 +154,7 @@
                             <td>".$value["fecha"]."</td>
                             <td>".$value["fecha_llegada"]."</td>
                             <td>".$value["establecimiento_nombre_organizacion"]."</td>
-                            <td>".$value["total"]."</td>
+                            <td>".number_format($value["total"],2,",",".")."</td>
                             <td>".$value["estado"]."</td>
                             <td>
                                 <a href='".base_url()."index.php/Presupuestos/editar/".$value["numero"]."' class='btn btn-sm btn-primary' data-toggle='tooltip' title='' data-original-title='Editar'><i class='fa fa-edit'></i></a>&nbsp;

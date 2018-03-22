@@ -9,6 +9,8 @@ class Login extends CI_Controller
 {
     public $session_ci= null;
     public $titulo_login= null;
+    private $texto_pie = "";
+    private $link_pie  = "";
     
     public function __construct()
     {
@@ -18,6 +20,9 @@ class Login extends CI_Controller
 
         $this->load->model("Configuraciones_model");
         $this->titulo_login = $this->Configuraciones_model->get_titulo_login();
+
+        $this->link_pie = $this->Configuraciones_model->get_link_pie();
+        $this->texto_pie = $this->Configuraciones_model->get_texto_pie();
         
     }
 
@@ -28,6 +33,8 @@ class Login extends CI_Controller
         $salida["mensajes_error"]=Array();
         $salida["mensaje_success"]="";
         $salida["titulo_login"]=$this->titulo_login;
+        $salida["link_pie"]=$this->link_pie;
+        $salida["texto_pie"]=$this->texto_pie;
 
         $salida["logo"]=$this->Configuracion_empresa_model->get_configuracion(3);
 
@@ -121,6 +128,8 @@ class Login extends CI_Controller
     {
         $salida["mensaje_aviso"]="";
         $salida["titulo_login"]=$this->titulo_login;
+        $salida["link_pie"]=$this->link_pie;
+        $salida["texto_pie"]=$this->texto_pie;
         
         if($this->input->post())
         {
@@ -137,21 +146,16 @@ class Login extends CI_Controller
                 $response_user = $this->Usuario_model->get_usuario_con_correo($usuario_correo);
                 $es_correo= true;
             }
-            else
-            {
-                $response_user= $this->Usuario_model->get_usuario_con_usuario($usuario_correo);
-            }
             
             if($response_user)
             {
                 $correo_usuario = $response_user["correo"];
-                $usuario= $response_user["usuario"];
-                $password  = $response_user["password"];
+                $password  = $response_user["pass"];
                 
                 $this->load->library("Recuperacion_cuenta");
                 
-                $mensaje = Recuperacion_cuenta::getHtmlMensajeDatosCuenta($correo_usuario,$usuario,$password);
-                $asunto = "Datos de su cuenta: $usuario";
+                $mensaje = Recuperacion_cuenta::getHtmlMensajeDatosCuenta($correo_usuario,$password);
+                $asunto = "Datos de su cuenta:";
                 $emisor= "mario.olivera96@gmail.com";
                 
                 if(Correo::enviar_correo($mensaje, $asunto, $emisor, $correo_usuario))
@@ -169,7 +173,7 @@ class Login extends CI_Controller
             else
             {
                 if($es_correo){$salida["mensaje_aviso"]="No se encontró ningun usuario con el correo ingresado";}
-                else{$salida["mensaje_aviso"]="No se encontró el usuario ingresado";}
+                
                 $this->load->view("login/recuperar_datos",$salida);
             }
         }

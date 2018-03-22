@@ -72,7 +72,7 @@
             <div class="icon">
               <i class="fa fa-bank"></i>
             </div>
-            <a href="<?php echo base_url() ?>index.php/Anuncio/abm_anuncios" class="small-box-footer">Ver todos <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="<?php echo base_url() ?>index.php/Instituciones/abm_instituciones" class="small-box-footer">Ver todas <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -87,7 +87,7 @@
             <div class="icon">
               <i class="fa fa-share-alt"></i>
             </div>
-            <a href="<?php echo base_url() ?>index.php/Anuncio/abm_anuncios" class="small-box-footer">Ver todos <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="<?php echo base_url() ?>index.php/Rubros/abm_rubros" class="small-box-footer">Ver todos <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -103,7 +103,7 @@
             <div class="icon">
               <i class="fa fa-shopping-cart"></i>
             </div>
-            <a href="<?php echo base_url() ?>index.php/Usuarios/abm_usuarios" class="small-box-footer">Ver todos <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="<?php echo base_url() ?>index.php/Productos/abm_productos" class="small-box-footer">Ver todos <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         
@@ -118,7 +118,7 @@
             <div class="icon">
               <i class="fa fa-list"></i>
             </div>
-           <a href="<?php echo base_url() ?>index.php/Usuarios/abm_usuarios" class="small-box-footer">Ver todos <i class="fa fa-arrow-circle-right"></i></a>
+           <a href="<?php echo base_url() ?>index.php/Presupuestos/abm_presupuestos" class="small-box-footer">Ver todos <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         

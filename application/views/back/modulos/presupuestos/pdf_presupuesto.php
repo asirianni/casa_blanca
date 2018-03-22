@@ -30,16 +30,22 @@
 
 <table>
     <tr style="background-color: #ccc;margin-bottom: 10px;">
-        <td width="170">
+        <td width="102">
              <b>CANTIDAD</b>
         </td>
         <td width="170">
              <b>DESCRIPCIÓN </b>
         </td>
-        <td width="170">
+        <td width="102">
              <b>UNITARIO</b>
         </td>
-        <td width="170">
+        <td width="102">
+             <b>DESCUENTO</b>
+        </td>
+        <td width="102">
+             <b>SUBTOTAL</b>
+        </td>
+        <td width="102">
              <b>TOTAL</b>
         </td>
     </tr>
@@ -60,32 +66,36 @@
             $unitario = (float)$value["precio"];
 
 
-            $subtotal =$unitario;
-            $total=$subtotal*$cantidad;
+            $subtotal =$unitario*$cantidad;
+            $total= $subtotal - ($subtotal * $value["descuento"] / 100);
 
             echo 
             "<tr>
                 <td width='170' align='center'>".$cantidad."</td>
                 <td width='170' align='center'>".$value["descripcion"]."</td>
                 <td width='170' align='center'>$".number_format($unitario,2,",",".")."</td>
+                <td width='170' align='center'>".number_format($value["descuento"],2,",",".")." %</td>
+                <td width='170' align='center'>$".number_format($subtotal,2,",",".")."</td>
                 <td width='170' align='center'>$".number_format($total,2,",",".")."</td>
             </tr>";
         }
 
         foreach ($rubros as $value)
         {
-            $cantidad = (float)$value["cantidad"];
+           $cantidad = (float)$value["cantidad"];
             $unitario = (float)$value["precio"];
 
 
-            $subtotal =$unitario;
-            $total=$subtotal*$cantidad;
+            $subtotal =$unitario*$cantidad;
+            $total=$subtotal - ($subtotal * $value["descuento"] / 100);
 
             echo 
             "<tr>
                 <td width='170' align='center'>".$cantidad."</td>
                 <td width='170' align='center'>".$value["descripcion"]."</td>
                 <td width='170' align='center'>$".number_format($unitario,2,",",".")."</td>
+                <td width='170' align='center'>".number_format($value["descuento"],2,",",".")." %</td>
+                <td width='170' align='center'>$".number_format($subtotal,2,",",".")."</td>
                 <td width='170' align='center'>$".number_format($total,2,",",".")."</td>
             </tr>";
         }
@@ -96,14 +106,16 @@
             $unitario = (float)$value["precio"];
 
 
-            $subtotal =$unitario;
-            $total=$subtotal*$cantidad;
+            $subtotal =$unitario*$cantidad;
+            $total=$subtotal - ($subtotal * $value["descuento"] / 100);
 
             echo 
             "<tr>
                 <td width='170' align='center'>".$cantidad."</td>
                 <td width='170' align='center'>".$value["descripcion"]."</td>
                 <td width='170' align='center'>$".number_format($unitario,2,",",".")."</td>
+                <td width='170' align='center'>".number_format($value["descuento"],2,",",".")." %</td>
+                <td width='170' align='center'>$".number_format($subtotal,2,",",".")."</td>
                 <td width='170' align='center'>$".number_format($total,2,",",".")."</td>
             </tr>";
         }

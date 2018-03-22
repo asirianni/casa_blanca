@@ -88,7 +88,7 @@
                         <tr>
                             <td>".$value["descripcion"]."</td>
                             <td>".$value["rubro_rubro"]."</td>
-                            <td>".$value["precio"]."</td>
+                            <td>$ ".number_format($value["precio"],2,",",".")."</td>
                             <td>".$value["mostrar"]."</td>
                             <td>
                                 <button class='btn btn-sm btn-primary' data-toggle='tooltip' title='' data-original-title='Editar' onClick='modal_editar(".$value["id"].")'><i class='fa fa-edit'></i></button>&nbsp;
@@ -133,11 +133,17 @@
                 <div class="col-md-12">
                     <label for="rubro_agregar" id="label_rubro_agregar">Rubro: *</label>
                     <select id="rubro_agregar" class="form-control" name="rubro_agregar" style="width: 100% !important;">
+                      <?php 
+                        foreach($rubros as $rubro)
+                        {
+                          echo "<option value='".$rubro["id"]."'>".$rubro["rubro"]."</option>";
+                        }
+                      ?>
                     </select>
                 </div>
                 <div class="col-md-12">
                     <label for="precio_agregar" id="label_precio_agregar">Precio: *</label>
-                    <input type="text" id="precio_agregar" class="form-control" name="precio_agregar">
+                    <input  type="number" step="0.5" id="precio_agregar" class="form-control" name="precio_agregar">
                 </div>
                 <div class="col-md-12">
                     <label for="mostrar_agregar" id="label_mostrar_agregar">Mostrar: *</label>
@@ -177,7 +183,7 @@
                 </div>
                 <div class="col-md-12">
                     <label for="precio_editar" id="label_precio_editar">Precio: *</label>
-                    <input type="text" id="precio_editar" class="form-control" name="precio_editar">
+                    <input type="number" step="0.5" id="precio_editar" class="form-control" name="precio_editar">
                 </div>
                 <div class="col-md-12">
                     <label for="mostrar_editar" id="label_mostrar_editar">Mostrar: *</label>
@@ -377,32 +383,32 @@
 
     if(descripcion == "")
     {
-      activar_error("label_descripcion_editar");
+      activar_error_label("label_descripcion_editar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_descripcion_editar");
+      desactivar_error_label("label_descripcion_editar");
     }
 
     if(rubro == "")
     {
-      activar_error("label_rubro_editar");
+      activar_error_label("label_rubro_editar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_rubro_editar");
+      desactivar_error_label("label_rubro_editar");
     }
 
     if(isNaN(precio))
     {
-      activar_error("label_precio_editar");
+      activar_error_label("label_precio_editar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_precio_editar");
+      desactivar_error_label("label_precio_editar");
     }
 
     return respuesta;
@@ -452,59 +458,38 @@
 
     if(descripcion == "")
     {
-      activar_error("label_descripcion_agregar");
+      activar_error_label("label_descripcion_agregar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_descripcion_agregar");
+      desactivar_error_label("label_descripcion_agregar");
     }
 
     if(rubro == "")
     {
-      activar_error("label_rubro_agregar");
+      activar_error_label("label_rubro_agregar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_rubro_agregar");
+      desactivar_error_label("label_rubro_agregar");
     }
 
     if(isNaN(precio))
     {
-      activar_error("label_precio_agregar");
+      activar_error_label("label_precio_agregar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_precio_agregar");
+      desactivar_error_label("label_precio_agregar");
     }
 
     return respuesta;
   }
 
   $(document).ready(function(){
-
-    $("#rubro_agregar").select2({        
-        ajax: {
-            url: "<?=base_url()?>index.php/Rubros/get_rubro_busqueda_select2",
-            dataType: 'json',
-            type: 'post',
-            delay: 250,
-            data: function (params) {
-                return {
-                    q: params.term 
-                };
-            },
-            processResults: function (data) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        minimumInputLength: 1
-    });
 
     $("#rubro_editar").select2({        
         ajax: {

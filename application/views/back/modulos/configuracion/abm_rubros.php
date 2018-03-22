@@ -86,7 +86,7 @@
                         echo "
                         <tr>
                             <td><span id='rubro_".$value["id"]."'>".$value["rubro"]."</span></td>
-                            <td><span id='precio_".$value["id"]."'>".$value["precio"]."</span></td>
+                            <td>$ <span id='precio_".$value["id"]."'>".number_format($value["precio"],2,",",".")."</span></td>
                             <td><span id='mostrar_".$value["id"]."'>".$value["mostrar"]."</td>
                             <td>
                                 <a href='#' class='btn btn-sm btn-primary' data-toggle='tooltip' title='' data-original-title='Editar' onCLick='abrir_modal_editar(".$value["id"].",&#39;".$value["rubro"]."&#39;,&#39;".$value["mostrar"]."&#39;)'><i class='fa fa-edit'></i></a>&nbsp;
@@ -133,7 +133,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="precio_agregar">Precio*</label>
-                        <input class="form-control" id="precio_agregar" name="precio_agregar" value="" type="text">
+                        <input class="form-control" id="precio_agregar" name="precio_agregar" value=""  type="number" step="0.5">
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -180,7 +180,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="precio_editar">Precio*</label>
-                        <input class="form-control" id="precio_editar" name="precio_editar" value="" type="text">
+                        <input class="form-control" id="precio_editar" name="precio_editar" value="" type="number" step="0.5">
                     </div>
                 </div>
                 <div class="col-md-12">

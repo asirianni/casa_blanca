@@ -75,7 +75,10 @@
             <!-- /.social-auth-links -->
             <br/>
             <a href="<?php echo base_url()?>index.php/Login/olvide_mis_datos">Olvide mi datos</a><br>
-            <!--<a href="register.html" class="text-center">Register a new membership</a>-->
+            
+        </div>
+        <div style="margin-top: 15px;text-align: center;color: blue !important;font-size: 17px;background-color: #fff;">
+            <a href="<?php echo $link_pie["valor"]?>" class="text-center"><?php echo $texto_pie["valor"]?></a>
         </div>
     <!-- /.login-box-body -->
     </div>

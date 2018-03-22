@@ -91,6 +91,8 @@ class Presupuesto_model extends CI_Model{
             
         }
 
+        $total_pedido = $total_pedido - (($total_pedido * $descuento_general) / 100);
+
         $datos = Array(
             "fecha" => $fecha,
             "fecha_llegada" => $fecha_llegada,
@@ -178,6 +180,8 @@ class Presupuesto_model extends CI_Model{
             $total_pedido+= $total_row;
             
         }
+
+        $total_pedido = $total_pedido - (($total_pedido * $descuento_general) / 100);
 
         $datos = Array(
             "fecha" => $fecha,

@@ -87,6 +87,17 @@ function desactivar_error(id)
     $("#"+id).css("border-style","solid");
     $("#"+id).css("border-color","#4e565a");
 }
+
+function activar_error_label(id)
+{
+  $("#"+id).css("color","#dd4b39");
+}
+
+function desactivar_error_label(id)
+{
+  $("#"+id).css("color","#000");
+}
+
 // VALIDA LA FECHA FORMATO Y SI EXISTE
 function validar_fecha_spanish(valor)
 {

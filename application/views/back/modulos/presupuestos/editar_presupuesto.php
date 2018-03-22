@@ -392,6 +392,7 @@
                     <thead>
                       <tr>
                         <th>RUBRO</th>
+                        <th>PRECIO</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -401,6 +402,7 @@
                         echo "
                         <tr>
                             <td><span id='rubro_".$value["id"]."'>".$value["rubro"]."</span></td>
+                            <td><span id='precio_".$value["id"]."'>$ ".number_format($value["precio"],2,",",".")."</span></td>
                             <td>
                                 <button class='btn btn-sm btn-primary' data-toggle='tooltip' title='' data-original-title='Agregar' onCLick='agregar_detalle_rubro(".$value["id"].")'><i class='fa fa-plus'></i></button>";
                                 
@@ -458,13 +460,13 @@
                 </div>
                 <div class="clearfix"></div>
             </div>
+             <div class="modal-footer">
+                 <div class="col-md-12" style="text-align: center;">
+                      <button class="btn btn-default" onClick="$('#modal_guardar_presupuesto').modal('hide');"><i class='fa fa-close'></i> No</button>
+                      <button class="btn btn-primary" onClick="procesar();"><i class='fa fa-save'></i> Si</button>
+                 </div>
+             </div>
         </div><!-- /.modal-content -->
-        <div class="modal-footer">
-           <div class="col-md-12" style="text-align: center;">
-                <button class="btn btn-default" onClick="$('#modal_guardar_presupuesto').modal('hide');"><i class='fa fa-close'></i> No</button>
-                <button class="btn btn-primary" onClick="procesar();"><i class='fa fa-save'></i> Si</button>
-           </div>
-       </div>
     </div><!-- /.modal-dialog -->
 </div>
 
@@ -635,7 +637,11 @@ function generar_html_tabla_listado()
 
     if(isNaN(descuento_general)){descuento_general=0;}
 
-    suma_totales = suma_totales - ((suma_totales * descuento_general) / 100);
+    var descuento_en_pesos = ((suma_totales * descuento_general) / 100);
+    
+    $("#pesos_de_descuento").text(descuento_en_pesos.toFixed(2));
+
+    suma_totales = suma_totales - descuento_en_pesos;
 
     $("#total").text((suma_totales).toFixed(2));
     $("#cuerpo_tabla_listado").html(html);
@@ -776,7 +782,8 @@ function ccleaner_arreglo_detalle()
 
 function abrir_modal_guardar()
 {
-  $('#modal_imprimir_presupuesto').modal('show');
+  //$('#modal_imprimir_presupuesto').modal('show');
+  $("#modal_guardar_presupuesto").modal("show");
 }
 
 function no_imprimir()

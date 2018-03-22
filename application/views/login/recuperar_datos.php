@@ -29,7 +29,7 @@
 
             <form action="<?php echo base_url()?>index.php/Login/olvide_mis_datos" method="post">
                 <div class="form-group has-feedback">
-                    <input type="text" name="usuario_correo" class="form-control" placeholder="Correo o Usuario">
+                    <input type="text" name="usuario_correo" class="form-control" placeholder="Correo">
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                 </div>
                 <div class="row">
@@ -64,7 +64,10 @@
             <!--<a href="register.html" class="text-center">Register a new membership</a>-->
         </div>
     <!-- /.login-box-body -->
-    </div>
+        <div style="margin-top: 15px;text-align: center;color: blue !important;font-size: 17px;background-color: #fff;">
+                <a href="<?php echo $link_pie["valor"]?>" class="text-center"><?php echo $texto_pie["valor"]?></a>
+            </div>
+        </div>
 <!-- /.login-box -->
 
 <script src="<?php echo base_url()?>recursos/plugins/jQuery/jquery-2.2.3.min.js"></script>

@@ -380,7 +380,7 @@
           {
             data= JSON.parse(data);
             
-            if(data === true)
+            if(data == true)
             {
               location.reload();
             }
@@ -406,72 +406,72 @@
 
     if(nombre_organizacion == "")
     {
-      activar_error("label_nombre_organizacion_editar");
+      activar_error_label("label_nombre_organizacion_editar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_nombre_organizacion_editar");
+      desactivar_error_label("label_nombre_organizacion_editar");
     }
 
     if(direccion == "")
     {
-      activar_error("label_direccion_editar");
+      activar_error_label("label_direccion_editar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_direccion_editar");
+      desactivar_error_label("label_direccion_editar");
     }
 
     if(localidad == "")
     {
-      activar_error("label_localidad_editar");
+      activar_error_label("label_localidad_editar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_localidad_editar");
+      desactivar_error_label("label_localidad_editar");
     }
 
     if(telefono == "")
     {
-      activar_error("label_telefono_editar");
+      activar_error_label("label_telefono_editar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_telefono_editar");
+      desactivar_error_label("label_telefono_editar");
     }
 
     if(correo == "" || !validarEmail(correo))
     {
-      activar_error("label_correo_editar");
+      activar_error_label("label_correo_editar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_correo_editar");
+      desactivar_error_label("label_correo_editar");
     }
 
     if(rector == "")
     {
-      activar_error("label_rector_editar");
+      activar_error_label("label_rector_editar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_rector_editar");
+      desactivar_error_label("label_rector_editar");
     }
 
     if(referente == "")
     {
-      activar_error("label_referente_editar");
+      activar_error_label("label_referente_editar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_referente_editar");
+      desactivar_error_label("label_referente_editar");
     }
 
     return respuesta;
@@ -497,7 +497,7 @@
           {
             data= JSON.parse(data);
             
-            if(data === true)
+            if(data)
             {
               location.reload();
             }
@@ -523,72 +523,72 @@
 
     if(nombre_organizacion == "")
     {
-      activar_error("label_nombre_organizacion_agregar");
+      activar_error_label("label_nombre_organizacion_agregar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_nombre_organizacion_agregar");
+      desactivar_error_label("label_nombre_organizacion_agregar");
     }
 
     if(direccion == "")
     {
-      activar_error("label_direccion_agregar");
+      activar_error_label("label_direccion_agregar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_direccion_agregar");
+      desactivar_error_label("label_direccion_agregar");
     }
 
     if(localidad == "")
     {
-      activar_error("label_localidad_agregar");
+      activar_error_label("label_localidad_agregar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_localidad_agregar");
+      desactivar_error_label("label_localidad_agregar");
     }
 
     if(telefono == "")
     {
-      activar_error("label_telefono_agregar");
+      activar_error_label("label_telefono_agregar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_telefono_agregar");
+      desactivar_error_label("label_telefono_agregar");
     }
 
     if(correo == "" || !validarEmail(correo))
     {
-      activar_error("label_correo_agregar");
+      activar_error_label("label_correo_agregar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_correo_agregar");
+      desactivar_error_label("label_correo_agregar");
     }
 
     if(rector == "")
     {
-      activar_error("label_rector_agregar");
+      activar_error_label("label_rector_agregar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_rector_agregar");
+      desactivar_error_label("label_rector_agregar");
     }
 
     if(referente == "")
     {
-      activar_error("label_referente_agregar");
+      activar_error_label("label_referente_agregar");
       respuesta = false;
     }
     else
     {
-      desactivar_error("label_referente_agregar");
+      desactivar_error_label("label_referente_agregar");
     }
 
     return respuesta;
