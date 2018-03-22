@@ -66,12 +66,16 @@
             <div class="box">
                 <div class="box-header">
                     <button class="btn btn_primary btn-primary" onCLick='$("#modal_agregar").modal("show");'><i class='fa fa-plus'></i> Agregar Rubro</button>
+                    <a  href="<?php echo base_url()?>index.php/Rubros/exportar_rubros_excel" class="btn btn-success pull-right" >
+                        <i class='fa fa-file-excel-o'></i> Exportar
+                    </a>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                   <table id="listado" class="table table-bordered table-hover">
                     <thead>
                       <tr>
                         <th>RUBRO</th>
+                        <th>PRECIO</th>
                         <th>MOSTRAR</th>
                         <th></th>
                       </tr>
@@ -82,10 +86,11 @@
                         echo "
                         <tr>
                             <td><span id='rubro_".$value["id"]."'>".$value["rubro"]."</span></td>
-                            <td> <span id='mostrar_".$value["id"]."'>".$value["mostrar"]."</td>
+                            <td><span id='precio_".$value["id"]."'>".$value["precio"]."</span></td>
+                            <td><span id='mostrar_".$value["id"]."'>".$value["mostrar"]."</td>
                             <td>
                                 <a href='#' class='btn btn-sm btn-primary' data-toggle='tooltip' title='' data-original-title='Editar' onCLick='abrir_modal_editar(".$value["id"].",&#39;".$value["rubro"]."&#39;,&#39;".$value["mostrar"]."&#39;)'><i class='fa fa-edit'></i></a>&nbsp;
-                                <a href='".base_url()."index.php/Rubros/administrar_subrubros/".$value["id"]."' class='btn btn-sm btn-warning' data-toggle='tooltip' title='' data-original-title='Subrubros' ><i class='fa fa-cube'></i></a>&nbsp;
+                                
                                 <a href='#' class='btn btn-sm btn-danger' data-toggle='tooltip' title='' data-original-title='Eliminar' onCLick='abrir_modal_eliminar(".$value["id"].")'><i class='fa fa-trash-o'></i></a>&nbsp;";
                                 
                       echo "</td>
@@ -127,6 +132,12 @@
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
+                        <label for="precio_agregar">Precio*</label>
+                        <input class="form-control" id="precio_agregar" name="precio_agregar" value="" type="text">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
                         <label for="mostrar_agregar">Mostrar*</label>
                         <select class="form-control" id="mostrar_agregar" name="mostrar_agregar" >
                             <option value='si'>si</option>
@@ -164,6 +175,12 @@
                     <div class="form-group">
                         <label for="rubro_editar">Rubro*</label>
                         <input class="form-control" id="rubro_editar" name="rubro_editar" value="" type="text">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="precio_editar">Precio*</label>
+                        <input class="form-control" id="precio_editar" name="precio_editar" value="" type="text">
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -271,7 +288,7 @@
 
     function agregar_rubro()
     {
-        if(validar_vacio("rubro_agregar") && validar_vacio("mostrar_agregar"))
+        if(validar_agregar())
         {
             var fd = new FormData($("#formulario_agregar")[0]);
 
@@ -291,13 +308,13 @@
 
                     var html_button=
                     "<a href='#' class='btn btn-sm btn-primary' data-toggle='tooltip' title='' data-original-title='Editar' onCLick='abrir_modal_editar("+row["id"]+")'><i class='fa fa-edit'></i></a>&nbsp; \n\
-                      <a href='<?php echo base_url() ?>index.php/Rubros/administrar_subrubros/"+row["id"]+"' class='btn btn-sm btn-warning' data-toggle='tooltip' title='' data-original-title='Subrubros' ><i class='fa fa-cube'></i></a>&nbsp;\n\
                       <a href='#' class='btn btn-sm btn-danger' data-toggle='tooltip' title='' data-original-title='Eliminar' onCLick='abrir_modal_eliminar("+row["id"]+")'><i class='fa fa-trash-o'></i></a>&nbsp;";
 
                     var rubro = "<span id='rubro_"+row["id"]+"'>"+row["rubro"]+"</span>";
+                    var precio = "<span id='precio_"+row["id"]+"'>"+row["precio"]+"</span>";
                     var mostrar = "<span id='mostrar_"+row["id"]+"'>"+row["mostrar"]+"</span>";
 
-                    mi_datatable.row.add([rubro,mostrar,html_button]).draw();
+                    mi_datatable.row.add([rubro,precio,mostrar,html_button]).draw();
                   }
                   else
                   {
@@ -314,6 +331,41 @@
         }
     }
     
+    function validar_agregar()
+    {
+      var respuesta = true;
+
+      var precio = $("#precio_agregar").val();
+      var rubro = $.trim($("#rubro_agregar").val());
+
+      
+      if(rubro == "")
+      {
+        respuesta= false;
+        activar_error("rubro_agregar");
+      }
+      else
+      {
+        desactivar_error("rubro_agregar");
+      }
+
+      precio= precio.replace(",",".");
+      precio= parseFloat(precio);
+
+      if(isNaN(precio))
+      {
+        respuesta= false;
+        activar_error("precio_agregar");
+      }
+      else
+      {
+        $("#precio_agregar").val(precio);
+        desactivar_error("precio_agregar");
+      }
+
+      return respuesta;
+    }
+
     function abrir_modal_editar(id,rubro,mostrar)
     {
       $.ajax({
@@ -329,6 +381,7 @@
               var row = data["row"];
 
               $("#id_editar").val(row["id"]);
+              $("#precio_editar").val(row["precio"]);
               $("#rubro_editar").val(row["rubro"]);
               $("#mostrar_editar").val(row["mostrar"]);
               $("#modal_editar").modal("show");
@@ -347,7 +400,7 @@
     
     function editar_rubro()
     {
-        if(validar_vacio("rubro_editar") && validar_vacio("mostrar_editar") && validar_vacio("id_editar"))
+        if(validar_editar())
         {
             var fd = new FormData($("#formulario_editar")[0]);
 
@@ -363,15 +416,7 @@
 
                   if(data["respuesta"])
                   {
-                    var row = data["row"];
-
-                    var object  = $("#rubro_"+row["id"]).parent("td");
-                    var cell = mi_datatable.cell(object);
-                    cell.data(row["rubro"]).draw();
-
-                    var object  = $("#mostrar_"+row["id"]).parent("td");
-                    var cell = mi_datatable.cell(object);
-                    cell.data(row["mostrar"]).draw();
+                    location.reload();
 
                   }
                   else
@@ -388,6 +433,42 @@
             });    
         }
     }
+
+    function validar_editar()
+    {
+      var respuesta = true;
+
+      var precio = $("#precio_editar").val();
+      var rubro = $.trim($("#rubro_editar").val());
+
+      
+      if(rubro == "")
+      {
+        respuesta= false;
+        activar_error("rubro_editar");
+      }
+      else
+      {
+        desactivar_error("rubro_editar");
+      }
+
+      precio= precio.replace(",",".");
+      precio= parseFloat(precio);
+
+      if(isNaN(precio))
+      {
+        respuesta= false;
+        activar_error("precio_editar");
+      }
+      else
+      {
+        $("#precio_editar").val(precio);
+        desactivar_error("precio_editar");
+      }
+
+      return respuesta;
+    }
+
     
     function abrir_modal_eliminar(id)
     {

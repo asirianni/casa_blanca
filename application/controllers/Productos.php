@@ -92,4 +92,44 @@ class Productos extends MY_Controller
 
         echo json_encode($respuesta);
     }
+
+    public function exportar_productos_excel()
+    {
+        if($this->funciones_generales->dar_permiso_a_modulo(Modulos::PRODUCTOS))
+        {
+            header('Content-Encoding: UTF-8');
+            header("Content-type: application/vnd.ms-excel; charset=UTF-8; name='excel'");
+            header("Content-Disposition: filename=Lista-de-Productos.xls");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+            
+            $productos= $this->Producto_model->get_productos();
+            
+            $html=
+            "
+            <table>
+                <thead>
+                  <tr >
+                    <th>Descripcion</th>
+                    <th>Rubro</th>
+                    <th>Precio</th>
+                    <th>Mostrar</th>
+                  </tr>
+                </thead>
+                <tbody> ";
+                  foreach ($productos as $value)
+                  { 
+             $html.= "<tr>
+                        <td>".utf8_decode($value["descripcion"])."</td>
+                        <td>".utf8_decode($value["rubro_rubro"])."</td>
+                        <td>".utf8_decode($value["precio"])."</td>
+                        <td>".utf8_decode($value["mostrar"])."</td>
+                    </tr>";
+                }
+       $html.= "</tbody>
+        </table>";
+            
+            echo $html;
+        }
+    }
 } 

@@ -66,9 +66,13 @@
                     <button onClick="$('#modal_agregar').modal('show')" class="btn btn-primary" >
                       <i class='fa fa-plus'></i> Agregar Institucion
                     </button>
+                    <a  href="<?php echo base_url()?>index.php/Instituciones/exportar_instituciones_excel" class="btn btn-success pull-right" >
+                        <i class='fa fa-file-excel-o'></i> Exportar
+                    </a>
                 </div><!-- /.box-header -->
                 <div class="box-body">
-                  <table id="example2" class="table table-bordered table-hover" style="text-align: center;">
+
+                  <table id="example2" class="table table-bordered table-hover" style="text-align: center;margin-top: 10px;">
                     <thead>
                       <tr >
                         <th>Nombre</th>

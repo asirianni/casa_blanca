@@ -220,15 +220,7 @@ function validar_numero_no_cero(valor)
 
 }
 
-function activar_error(id)
-  {
-      $("#"+id).css("color","#d9534f");
-  }
-  
-  function desactivar_error(id)
-  {
-      $("#"+id).css("color","#333");
-  }
+
 
   function validar_longitud_int(valor,longitud)
   {

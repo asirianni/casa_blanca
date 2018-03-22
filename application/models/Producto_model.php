@@ -6,6 +6,13 @@ class Producto_model extends CI_Model{
         parent::__construct();
     }
 
+    public function get_cantidad()
+    {
+        $r = $this->db->query("select count(id) as cantidad from productos");
+        $r = $r->row_array();
+        return $r["cantidad"];
+    }
+
     public function get_productos()
     {
         $r = $this->db->query("select productos.*,rubro.rubro as rubro_rubro from productos LEFT JOIN rubro on rubro.id = productos.rubro ");

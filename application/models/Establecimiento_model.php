@@ -33,6 +33,13 @@ class Establecimiento_model extends CI_Model{
         return $r->row_array();
     }
 
+    public function get_cantidad()
+    {
+        $r = $this->db->query("SELECT count(establecimiento.id) as cantidad FROM establecimiento");
+        $r = $r->row_array();
+        return $r["cantidad"];
+    }
+
     public function get_establecimientos()
     {
         $r = $this->db->query("SELECT establecimiento.*,localidades.localidad as localidades_localidad FROM establecimiento INNER JOIN localidades on localidades.codigo = establecimiento.localidad");

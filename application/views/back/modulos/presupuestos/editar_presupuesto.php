@@ -130,11 +130,11 @@
                   </div>
                   <div class="col-md-5">
                       <label>Direccion</label>
-                      <input type="text" class="form-control"  id="direccion" value="<?php echo $presupuesto["direccion"]?>">
+                      <input type="text" class="form-control"  id="direccion" value="<?php echo $presupuesto["direccion"]?>" readonly="">
                   </div>
                   <div class="col-md-5">
                       <label>Localidad</label>
-                      <select class="form-control"  id="localidad" style="width: 100% !important;">
+                      <select class="form-control"  id="localidad" style="width: 100% !important;" readonly="">
                         <?php
                         if($localidad)
                         {
@@ -978,8 +978,58 @@ foreach ($no_rubros_no_productos as $value)
     $("#btn_guardar").removeClass("disabled");
 <?php } ?>
 
+  $.ajax({
+      url: "<?php echo base_url()?>index.php/Instituciones/get_institucion",
+      type: "POST",
+      data:{id:<?php echo $presupuesto["establecimiento"]?>},
+      success: function(data)
+      {
+        data= JSON.parse(data);
+        
+        if(data)
+        {
+          $("#direccion").val(data["direccion"]);
+
+          var html_option = "<option value='"+data["localidad"]+"'>"+data["localidades_localidad"]+"</option>";
+          $("#localidad").html(html_option);
+          $("#localidad").val(data["localidad"]);
+        }
+      },
+      error: function(event){
+        alert("ERROR: verifique que la institucion no este agregada");
+      },
+  });
   
   generar_html_tabla_listado();
+
+  $("#establecimiento").change(function(){
+    var establecimiento = $(this).val();
+
+    if(establecimiento != 0 && establecimiento != "")
+    {
+      $.ajax({
+          url: "<?php echo base_url()?>index.php/Instituciones/get_institucion",
+          type: "POST",
+          data:{id:establecimiento},
+          success: function(data)
+          {
+            data= JSON.parse(data);
+            
+            if(data)
+            {
+              $("#direccion").val(data["direccion"]);
+
+              var html_option = "<option value='"+data["localidad"]+"'>"+data["localidades_localidad"]+"</option>";
+              $("#localidad").html(html_option);
+              $("#localidad").val(data["localidad"]);
+            }
+          },
+          error: function(event){
+            alert("ERROR: verifique que la institucion no este agregada");
+          },
+      });
+    }
+  });
 
   $("#establecimiento").select2({        
     ajax: {
@@ -1023,26 +1073,6 @@ foreach ($no_rubros_no_productos as $value)
         minimumInputLength: 1
     });
 
-  $("#localidad").select2({        
-      ajax: {
-          url: "<?=base_url()?>index.php/Localidades/get_localidad_busqueda_select2",
-          dataType: 'json',
-          type: 'post',
-          delay: 250,
-          data: function (params) {
-              return {
-                  q: params.term 
-              };
-          },
-          processResults: function (data) {
-              return {
-                  results: data
-              };
-          },
-          cache: true
-      },
-      minimumInputLength: 1
-  });
 
 
     jQuery('.datetimepicker').datetimepicker({

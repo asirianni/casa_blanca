@@ -12,7 +12,7 @@ class Header_usuario
         
         switch($tipo_usuario)
         {
-            case 1: $html= Header_usuario::getHeaderAdministrador($nombre,$apellido,$fecha_registro,$foto_perfil);
+            case 1: $html= Header_usuario::getHeaderDefault($nombre,$apellido,$fecha_registro,$foto_perfil);
                 break;
             default:
               $html= Header_usuario::getHeaderDefault($nombre,$apellido,$fecha_registro,$foto_perfil);

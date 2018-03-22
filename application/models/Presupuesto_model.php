@@ -26,6 +26,13 @@ class Presupuesto_model extends CI_Model{
         return $r->result_array();
     }
 
+    public function get_cantidad_pendientes()
+    {
+         $r = $this->db->query("SELECT count(numero) as cantidad FROM presupuestos where estado ='pendiente'");
+        $r =  $r->row_array();
+        return $r["cantidad"];
+    }
+
     public function get_presupuestos()
     {
         $r = $this->db->query("SELECT presupuestos.*, usuarios.correo as usuarios_correo,establecimiento.nombre_organizacion as establecimiento_nombre_organizacion FROM presupuestos INNER JOIN usuarios on usuarios.id = presupuestos.usuario INNER JOIN establecimiento on establecimiento.id = presupuestos.establecimiento");

@@ -65,6 +65,27 @@
           <a href="<?php echo base_url()?>index.php/Presupuestos/agregar" class="btn btn-primary" >
             <i class='fa fa-plus'></i> Agregar Presupuesto
           </a>
+          <form id="form_exportar" hidden="true" action="<?php echo base_url()?>index.php/Presupuestos/exportar_presupuestos_excel" method="post">
+
+            <input type="hidden" name="desde" value="<?php echo $desde ?>">
+            <input type="hidden" name="hasta" value="<?php echo $hasta ?>">
+            
+            <?php
+
+            if($institucion)
+            {
+              echo "<input type='hidden' name='institucion' value='".$institucion["id"]."'>";
+            }
+            else
+            {
+              echo '<input type="hidden" name="institucion" value="0">';
+            }
+            ?>
+
+          </form>
+          <button onClick='$("#form_exportar").submit()' class="btn btn-success pull-right" >
+              <i class='fa fa-file-excel-o'></i> Exportar
+          </button>
 
             <div class="box" style="margin-top: 10px;">
                 <div class="box-header">

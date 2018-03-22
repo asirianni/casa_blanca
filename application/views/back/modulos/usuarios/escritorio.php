@@ -65,12 +65,12 @@
           <!-- small box -->
           <div class="small-box bg-green">
             <div class="inner">
-              <h3><?php echo $cantidad_publicados ?></h3>
+              <h3><?php echo $cantidad_instituciones ?></h3>
 
-              <p>Anuncios publicados</p>
+              <p>Instituciones</p>
             </div>
             <div class="icon">
-              <i class="ion ion-stats-bars"></i>
+              <i class="fa fa-bank"></i>
             </div>
             <a href="<?php echo base_url() ?>index.php/Anuncio/abm_anuncios" class="small-box-footer">Ver todos <i class="fa fa-arrow-circle-right"></i></a>
           </div>
@@ -78,14 +78,14 @@
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
-          <div class="small-box bg-red">
+          <div class="small-box bg-blue">
             <div class="inner">
-              <h3><?php echo $cantidad_denunciados ?></h3>
+              <h3><?php echo $cantidad_rubros ?></h3>
 
-              <p>Anuncios denunciados</p>
+              <p>Rubros</p>
             </div>
             <div class="icon">
-              <i class="ion ion-stats-bars"></i>
+              <i class="fa fa-share-alt"></i>
             </div>
             <a href="<?php echo base_url() ?>index.php/Anuncio/abm_anuncios" class="small-box-footer">Ver todos <i class="fa fa-arrow-circle-right"></i></a>
           </div>
@@ -94,14 +94,14 @@
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
-          <div class="small-box bg-aqua">
+          <div class="small-box bg-yellow">
             <div class="inner">
-              <h3><?php echo $cantidad_operativos ?></h3>
+              <h3><?php echo $cantidad_productos ?></h3>
 
-              <p>Usuarios operativos</p>
+              <p>Productos</p>
             </div>
             <div class="icon">
-              <i class="ion ion ion-person"></i>
+              <i class="fa fa-shopping-cart"></i>
             </div>
             <a href="<?php echo base_url() ?>index.php/Usuarios/abm_usuarios" class="small-box-footer">Ver todos <i class="fa fa-arrow-circle-right"></i></a>
           </div>
@@ -109,14 +109,14 @@
         
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
-          <div class="small-box bg-yellow">
+          <div class="small-box bg-red">
             <div class="inner">
-              <h3><?php echo $cantidad_suspendidos ?></h3>
+              <h3><?php echo $cantidad_presupuestos_pendientes ?></h3>
 
-              <p>Usuarios suspendidos</p>
+              <p>Presupuestos pendientes</p>
             </div>
             <div class="icon">
-              <i class="ion ion-person"></i>
+              <i class="fa fa-list"></i>
             </div>
            <a href="<?php echo base_url() ?>index.php/Usuarios/abm_usuarios" class="small-box-footer">Ver todos <i class="fa fa-arrow-circle-right"></i></a>
           </div>

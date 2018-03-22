@@ -5,6 +5,11 @@ class Escritorio extends MY_Controller
      public function __construct()
     {
         parent::__construct();
+
+        $this->load->model("Establecimiento_model");
+        $this->load->model("Rubro_model");
+        $this->load->model("Producto_model");
+        $this->load->model("Presupuesto_model");
     }
     
     public function index()
@@ -19,11 +24,11 @@ class Escritorio extends MY_Controller
             $output["footer"]=$this->adminlte->getFooter();
             $output["controller_usuario"]=$this->controller_usuario;
             
-            $output["cantidad_publicados"]= 0;
-            $output["cantidad_denunciados"]= 0;
-            $output["cantidad_operativos"]= $this->Usuario_model->get_cantidad_operativos();
-            $output["cantidad_suspendidos"]= $this->Usuario_model->get_cantidad_suspendidos();
-            $this->load->view("back/admin/escritorio",$output);
+            $output["cantidad_instituciones"]= $this->Establecimiento_model->get_cantidad();
+            $output["cantidad_rubros"]= $this->Rubro_model->get_cantidad();
+            $output["cantidad_productos"]= $this->Producto_model->get_cantidad();
+            $output["cantidad_presupuestos_pendientes"]= $this->Presupuesto_model->get_cantidad_pendientes();
+            $this->load->view("back/modulos/usuarios/escritorio",$output);
         }
         else
         {

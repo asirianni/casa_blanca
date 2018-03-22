@@ -33,6 +33,7 @@ class Rubros extends MY_Controller
             $this->load->view("back/modulos/configuracion/abm_rubros",$output);
         }
     }
+    /*
     
     public function administrar_subrubros($id_rubro = null)
     {
@@ -66,7 +67,7 @@ class Rubros extends MY_Controller
                 redirect("Rubros");
             }
         }
-    }
+    }*/
 
     public function agregar_rubro()
     {
@@ -78,8 +79,9 @@ class Rubros extends MY_Controller
 
                 $rubro = trim($this->input->post("rubro_agregar"));
                 $mostrar = $this->input->post("mostrar_agregar");
+                $precio = $this->input->post("precio_agregar");
                 
-                $row = $this->Rubro_model->agregar_rubro($rubro,$mostrar);
+                $row = $this->Rubro_model->agregar_rubro($rubro,$mostrar,$precio);
 
                 if($row)
                 {
@@ -102,9 +104,10 @@ class Rubros extends MY_Controller
 
                 $id = $this->input->post("id_editar");
                 $rubro = $this->input->post("rubro_editar");
+                $precio = $this->input->post("precio_editar");
                 $mostrar = $this->input->post("mostrar_editar");
                 
-                $row = $this->Rubro_model->editar_rubro($id,$rubro,$mostrar);
+                $row = $this->Rubro_model->editar_rubro($id,$rubro,$mostrar,$precio);
 
                 if($row)
                 {
@@ -117,6 +120,7 @@ class Rubros extends MY_Controller
         }
     }
 
+    /*
     public function agregar_subrubro()
     {
         if($this->funciones_generales->dar_permiso_a_modulo(Modulos::CONFIGURACION))
@@ -184,7 +188,7 @@ class Rubros extends MY_Controller
                 echo json_encode($respuesta);
             }
         }
-    }
+    }*/
     
 
     public function eliminar_rubro()
@@ -274,6 +278,44 @@ class Rubros extends MY_Controller
             $respuesta = $this->Rubro_model->get_subrubro_busqueda_select2($this->input->post("q"),$this->input->post("id_rubro"));
             
             echo json_encode($respuesta);
+        }
+    }
+
+    public function exportar_rubros_excel()
+    {
+        if($this->funciones_generales->dar_permiso_a_modulo(Modulos::PRODUCTOS))
+        {
+            header('Content-Encoding: UTF-8');
+            header("Content-type: application/vnd.ms-excel; charset=UTF-8; name='excel'");
+            header("Content-Disposition: filename=Lista-de-Rubros.xls");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+            
+            $rubros= $this->Rubro_model->get_rubros();
+            
+            $html=
+            "
+            <table>
+                <thead>
+                  <tr>
+                    <th>Rubro</th>
+                    <th>Precio</th>
+                    <th>Mostrar</th>
+                  </tr>
+                </thead>
+                <tbody> ";
+                  foreach ($rubros as $value)
+                  { 
+             $html.= "<tr>
+                        <td>".utf8_decode($value["rubro"])."</td>
+                        <td>".utf8_decode($value["precio"])."</td>
+                        <td>".utf8_decode($value["mostrar"])."</td>
+                    </tr>";
+                }
+       $html.= "</tbody>
+        </table>";
+            
+            echo $html;
         }
     }
 }

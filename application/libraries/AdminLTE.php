@@ -79,7 +79,7 @@ class AdminLTE extends Config
                 <ul class='sidebar-menu'>
                   <li class='header'>MENU DE NAVEGACION</li>
 
-                  <li><a href='".base_url()."index.php/Escritorio'><i class='fa fa-desktop'></i> <span>Escritorio</span></a></li>";
+                  <li><a href='".base_url()."index.php/Escritorio'><i class='fa fa-desktop'></i> <span>ESCRITORIO</span></a></li>";
        
                   
                   // SE AGREGA TAMBIEN LOS MODULOS A LOS QUE TIENE ACCESO
@@ -90,7 +90,7 @@ class AdminLTE extends Config
 
                     $html.="<li class='treeview'>
                         <a href='#'>
-                          <i class='fa fa-users'></i> <span>Usuarios</span>
+                          <i class='fa fa-users'></i> <span>USUARIOS</span>
                           <span class='pull-right-container'>
                             <i class='fa fa-angle-left pull-right'></i>
                           </span>
@@ -166,7 +166,7 @@ class AdminLTE extends Config
 
                     $html.="<li class='treeview'>
                         <a href='#'>
-                          <i class='fa fa-gears'></i> <span>Configuracion</span>
+                          <i class='fa fa-gears'></i> <span>CONFIGURACIONES</span>
                           <span class='pull-right-container'>
                             <i class='fa fa-angle-left pull-right'></i>
                           </span>

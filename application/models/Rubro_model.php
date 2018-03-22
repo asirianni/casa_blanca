@@ -65,6 +65,13 @@ class Rubro_model extends CI_Model{
         return $r->row_array();
     }
     
+    public function get_cantidad()
+    {
+        $r = $this->db->query("select count(id) as cantidad from rubro");
+        $r = $r->row_array();
+        return $r["cantidad"];
+    }
+
     public function get_rubros()
     {
         $r = $this->db->query("select rubro.* from rubro");
@@ -102,13 +109,13 @@ class Rubro_model extends CI_Model{
         return $r->row_array();
     }
     
-    public function agregar_rubro($rubro,$mostrar)
+    public function agregar_rubro($rubro,$mostrar,$precio)
     {
         $respuesta =false;
 
         $this->db->trans_start();
 
-        if($this->db->insert("rubro",Array("rubro"=>$rubro,"mostrar"=>$mostrar)))
+        if($this->db->insert("rubro",Array("rubro"=>$rubro,"mostrar"=>$mostrar,"precio"=>$precio)))
         {  
             $respuesta= $this->get_ultimo_rubro();
         }
@@ -187,14 +194,14 @@ class Rubro_model extends CI_Model{
         return $this->db->delete("sub_rubro");
     }
     
-    public function editar_rubro($id,$rubro,$mostrar)
+    public function editar_rubro($id,$rubro,$mostrar,$precio)
     {
         $respuesta =false;
 
         $this->db->trans_start();
 
         $this->db->where("id",$id);
-        $respuesta = $this->db->update("rubro",Array("rubro"=>$rubro,"mostrar"=>$mostrar));
+        $respuesta = $this->db->update("rubro",Array("rubro"=>$rubro,"mostrar"=>$mostrar,"precio"=>$precio));
 
         if($respuesta)
         {  

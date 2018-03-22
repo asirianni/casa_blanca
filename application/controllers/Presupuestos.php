@@ -266,4 +266,82 @@ class Presupuestos extends MY_Controller
             }
         }
     }
+
+
+    public function exportar_presupuestos_excel()
+    {
+        if($this->funciones_generales->dar_permiso_a_modulo(Modulos::PRODUCTOS))
+        {
+            header('Content-Encoding: UTF-8');
+            header("Content-type: application/vnd.ms-excel; charset=UTF-8; name='excel'");
+            header("Content-Disposition: filename=Lista-de-Presupuestos.xls");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+            
+            $this->load->model("Establecimiento_model");
+            
+            $desde = $this->input->post("desde");
+            $hasta = $this->input->post("hasta");
+            $institucion = $this->input->post("institucion");
+            
+
+            $presupuestos= $this->Presupuesto_model->get_presupuestos_with_filters($desde,$hasta,$institucion);
+            
+            $institucion=$this->Establecimiento_model->get_establecimiento($institucion);
+            
+
+            $institucion_text= "Todas";
+
+            if($institucion)
+            {
+                $institucion_text = $institucion["nombre_organizacion"];
+            }
+
+            $html=
+            "
+            <table>
+                <thead>
+                  <tr>
+                    <th>Desde</th>
+                    <th>Hasta</th>
+                    <th>Institucion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <td>".$desde."</td>
+                    <td>".$hasta."</td>
+                    <td>".$institucion_text."</td>
+                </tbody>
+            </table>
+            <br/>
+            <br/>
+            <table>
+                <thead>
+                  <tr>
+                    <th>Numero</th>
+                    <th>Fecha</th>
+                    <th>Fecha llegada</th>
+                    <th>Establecimiento</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody> ";
+                  foreach ($presupuestos as $value)
+                  { 
+             $html.= "<tr>
+                        <td>".utf8_decode($value["numero"])."</td>
+                        <td>".utf8_decode($value["fecha"])."</td>
+                        <td>".utf8_decode($value["fecha_llegada"])."</td>
+                        <td>".utf8_decode($value["establecimiento_nombre_organizacion"])."</td>
+                        <td>$ ".utf8_decode($value["total"])."</td>
+                        <td>".utf8_decode($value["estado"])."</td>
+                    </tr>";
+                }
+       $html.= "</tbody>
+        </table>";
+            
+            echo $html;
+        }
+    }
 } 

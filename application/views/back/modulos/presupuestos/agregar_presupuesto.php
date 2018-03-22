@@ -120,11 +120,11 @@
                   </div>
                   <div class="col-md-5">
                       <label>Direccion</label>
-                      <input type="text" class="form-control"  id="direccion">
+                      <input type="text" class="form-control"  id="direccion" readonly="">
                   </div>
                   <div class="col-md-5">
                       <label>Localidad</label>
-                      <select class="form-control"  id="localidad" style="width: 100% !important;">
+                      <select class="form-control"  id="localidad" style="width: 100% !important;" readonly="">
                       </select>
                   </div>
               </div>
@@ -889,6 +889,36 @@ function desactivar_error_input(id)
 }
 
 $(document).ready(function(){
+
+  $("#establecimiento").change(function(){
+    var establecimiento = $(this).val();
+
+    if(establecimiento != 0 && establecimiento != "")
+    {
+      $.ajax({
+          url: "<?php echo base_url()?>index.php/Instituciones/get_institucion",
+          type: "POST",
+          data:{id:establecimiento},
+          success: function(data)
+          {
+            data= JSON.parse(data);
+            
+            if(data)
+            {
+              $("#direccion").val(data["direccion"]);
+
+              var html_option = "<option value='"+data["localidad"]+"'>"+data["localidades_localidad"]+"</option>";
+              $("#localidad").html(html_option);
+              $("#localidad").val(data["localidad"]);
+            }
+          },
+          error: function(event){
+            alert("ERROR: verifique que la institucion no este agregada");
+          },
+      });
+    }
+  });
+
   $("#establecimiento").select2({        
     ajax: {
         url: "<?=base_url()?>index.php/Instituciones/get_institucion_busqueda_select2",
@@ -930,27 +960,6 @@ $(document).ready(function(){
         },
         minimumInputLength: 1
     });
-
-  $("#localidad").select2({        
-      ajax: {
-          url: "<?=base_url()?>index.php/Localidades/get_localidad_busqueda_select2",
-          dataType: 'json',
-          type: 'post',
-          delay: 250,
-          data: function (params) {
-              return {
-                  q: params.term 
-              };
-          },
-          processResults: function (data) {
-              return {
-                  results: data
-              };
-          },
-          cache: true
-      },
-      minimumInputLength: 1
-  });
 
 
     jQuery('.datetimepicker').datetimepicker({
