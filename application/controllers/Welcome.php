@@ -23,9 +23,12 @@ class Welcome extends CI_Controller {
             $this->load->helper('url');
             $this->load->helper('form');
             $this->load->library('session');
+            $this->load->library('grocery_CRUD');
             $this->load->model("Configuracion_empresa_model");
             $this->load->model("Slider_textos_model");
             $this->load->model("Marcas_model");
+            $this->load->model("Producto_model");
+            $this->load->model("Nosotros_model");
 
         }
     
@@ -54,6 +57,10 @@ class Welcome extends CI_Controller {
             $salida["marcas"]=false;
             $salida["contacto"]=false;
             $salida["slider_textos"]=false;
+            $nosotros=$this->Nosotros_model->get_nosotros();
+            $salida["titulo_nosotros"]=$nosotros["titulo"];
+            $salida["leyenda"]=$nosotros["leyenda"];
+            $salida["texto"]=$nosotros["texto"];
             $salida= $this->configuraciones($salida);
             $this->load->view('header_home', $salida);
             $this->load->view('nosotros', $salida);
@@ -69,6 +76,7 @@ class Welcome extends CI_Controller {
             $salida["contacto"]=false;
             $salida["slider_textos"]=false;
             $salida= $this->configuraciones($salida);
+            $salida["productos"]=$this->Producto_model->get_productos();
             $this->load->view('header_home', $salida);
             $this->load->view('productos', $salida);
             $this->load->view('footer');
@@ -101,6 +109,104 @@ class Welcome extends CI_Controller {
             $this->load->view('header_home', $salida);
             $this->load->view('contacto', $salida);
             $this->load->view('footer');
+	}
+        
+        public function adm_textos()
+	{
+            try{
+                    $crud = new grocery_CRUD();
+
+                    $crud->set_theme('datatables');
+                    $crud->set_table('slider_textos');
+                    
+                    $output = $crud->render();
+                    $this->session->set_userdata('title', 'Textos Slider Home');
+                    $this->_example_output($output);
+
+            }catch(Exception $e){
+                    show_error($e->getMessage().' --- '.$e->getTraceAsString());
+            }
+	}
+        
+        public function adm_nosotros()
+	{
+            try{
+                    $crud = new grocery_CRUD();
+
+                    $crud->set_theme('datatables');
+                    $crud->set_table('nosotros');
+                    $crud->unset_delete();
+                    $crud->unset_add();
+                    $crud->required_fields('titulo','leyenda','texto');
+                    $output = $crud->render();
+                    $this->session->set_userdata('title', 'Nosotros');
+                    $this->_example_output($output);
+
+            }catch(Exception $e){
+                    show_error($e->getMessage().' --- '.$e->getTraceAsString());
+            }
+	}
+        
+        
+        
+        public function adm_productos()
+	{
+            try{
+                    $crud = new grocery_CRUD();
+
+                    $crud->set_theme('datatables');
+                    $crud->set_table('productos');
+                    $crud->required_fields('imagen');
+                    $crud->set_field_upload('imagen','recursos/images/productos');
+                    $output = $crud->render();
+                    $this->session->set_userdata('title', 'Productos Destacados');
+                    $this->_example_output($output);
+
+            }catch(Exception $e){
+                    show_error($e->getMessage().' --- '.$e->getTraceAsString());
+            }
+	}
+        
+        public function adm_marcas()
+	{
+            try{
+                    $crud = new grocery_CRUD();
+
+                    $crud->set_theme('datatables');
+                    $crud->set_table('marcas');
+                    $crud->required_fields('imagen');
+                    $crud->set_field_upload('imagen','recursos/images/marcas');
+                    $output = $crud->render();
+                    $this->session->set_userdata('title', 'Marcas');
+                    $this->_example_output($output);
+
+            }catch(Exception $e){
+                    show_error($e->getMessage().' --- '.$e->getTraceAsString());
+            }
+	}
+        
+        public function adm_configuraciones()
+	{
+            try{
+                    $crud = new grocery_CRUD();
+                    $crud->unset_delete();
+                    $crud->unset_add();
+                    $crud->unset_edit_fields('configuracion');
+                    
+                    $crud->set_theme('datatables');
+                    $crud->set_table('configuraciones');
+                    $output = $crud->render();
+                    $this->session->set_userdata('title', 'Configuraciones');
+                    $this->_example_output($output);
+
+            }catch(Exception $e){
+                    show_error($e->getMessage().' --- '.$e->getTraceAsString());
+            }
+	}
+        
+        public function _example_output($output = null)
+	{
+            $this->load->view('example.php',(array)$output);
 	}
         
         private function configuraciones($datos){

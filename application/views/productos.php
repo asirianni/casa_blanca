@@ -11,31 +11,21 @@
                                                                     });
                                             </script>
                     <div class="gallery-grids">
-                            <div class="gallery-grid wow bounceIn animated" data-wow-delay="0.4s" style="visibility: visible; -webkit-animation-delay: 0.4s;">
-                                    <a href="<?php echo base_url()?>recursos/images/6-.jpg" class="b-link-stripe b-animate-go  swipebox"  title="Image Title">
-                                            <img src="<?php echo base_url()?>recursos/images/6.jpg" alt="" class="img-responsive">
-                                    </a>
-                            </div>
-                            <div class="gallery-grid1 wow bounceIn animated" data-wow-delay="0.4s" style="visibility: visible; -webkit-animation-delay: 0.4s;">
-                                    <a href="<?php echo base_url()?>recursos/images/8-.jpg" class="b-link-stripe b-animate-go  swipebox"  title="Image Title">
-                                            <img src="<?php echo base_url()?>recursos/images/8.jpg" alt="" class="img-responsive">
-                                    </a>
-                            </div>
-                            <div class="gallery-grid wow bounceIn animated" data-wow-delay="0.4s" style="visibility: visible; -webkit-animation-delay: 0.4s;">
-                                    <a href="<?php echo base_url()?>recursos/images/5-.jpg" class="b-link-stripe b-animate-go  swipebox"  title="Image Title">
-                                            <img src="<?php echo base_url()?>recursos/images/5.jpg" alt="" class="img-responsive">
-                                    </a>
-                            </div>
-                            <div class="gallery-grid1 wow bounceIn animated" data-wow-delay="0.4s" style="visibility: visible; -webkit-animation-delay: 0.4s;">
-                                    <a href="<?php echo base_url()?>recursos/images/9-.jpg" class="b-link-stripe b-animate-go  swipebox"  title="Image Title">
-                                            <img src="<?php echo base_url()?>recursos/images/9.jpg" alt="" class="img-responsive">
-                                    </a>
-                            </div>
-                            <div class="gallery-grid wow bounceIn animated" data-wow-delay="0.4s" style="visibility: visible; -webkit-animation-delay: 0.4s;">
-                                    <a href="<?php echo base_url()?>recursos/images/10-.jpg" class="b-link-stripe b-animate-go  swipebox"  title="Image Title">
-                                            <img src="<?php echo base_url()?>recursos/images/10.jpg" alt="" class="img-responsive">
-                                    </a>
-                            </div>
+                        
+                        <?php
+                            $html="";
+                            foreach ($productos as $s) {
+                              $html.="<div class='gallery-grid wow bounceIn animated' data-wow-delay='0.4s' style='visibility: visible; -webkit-animation-delay: 0.4s;'>
+                                        <a href='".base_url()."recursos/images/productos/".$s["imagen"]."' class='b-link-stripe b-animate-go  swipebox'  title='".$s["titulo"]."'>
+                                                <img src='".base_url()."recursos/images/productos/".$s["imagen"]."' alt='' class='img-responsive'>
+                                        </a>
+                                </div>";  
+                            }
+                            echo $html;                        
+                         ?>
+                        
+                        
+                           
                         
                             <div class="clearfix"> </div>
                     </div>

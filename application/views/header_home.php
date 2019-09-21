@@ -30,7 +30,7 @@
 		<div class="container">
 			<div class="header">
 				<div class="head-logo">
-					<a href="index.html"><img src="<?php echo base_url()?>recursos/images/logo1.png" alt="" /></a>
+                                    <a href="<?php echo base_url();?>"><img src="<?php echo base_url()?>recursos/images/logo1.png" alt="" /></a>
 				</div>
 				<div class="top-nav">
 					<span class="menu"><img src="<?php echo base_url()?>recursos/images/menu.png" alt=""></span>

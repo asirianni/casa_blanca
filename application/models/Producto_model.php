@@ -15,7 +15,7 @@ class Producto_model extends CI_Model{
 
     public function get_productos()
     {
-        $r = $this->db->query("select productos.*,rubro.rubro as rubro_rubro from productos LEFT JOIN rubro on rubro.id = productos.rubro ");
+        $r = $this->db->query("select * from productos");
         return $r->result_array();
     }
 
