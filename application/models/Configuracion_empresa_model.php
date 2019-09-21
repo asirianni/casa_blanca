@@ -15,9 +15,9 @@ class Configuracion_empresa_model extends CI_Model
     
     public function get_configuracion($id)
     {
-        $r = $this->db->query("select * from configuracion_empresa where codigo = $id");
-        $r= $r->row_array();
-        return $r["valor"];
+        $r = $this->db->query("select * from configuraciones where id = $id");
+        return $r->row_array();
+        
     }
     
     public function editar_configuracion($id,$valor)

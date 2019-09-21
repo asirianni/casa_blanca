@@ -18,8 +18,107 @@ class Welcome extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
+        public function __construct(){
+            parent::__construct();
+            $this->load->helper('url');
+            $this->load->helper('form');
+            $this->load->library('session');
+            $this->load->model("Configuracion_empresa_model");
+            $this->load->model("Slider_textos_model");
+            $this->load->model("Marcas_model");
+
+        }
+    
 	public function index()
 	{
-		$this->load->view('welcome_message');
+            $salida["title"]="Districart";
+            $salida["home"]=true;
+            $salida["nosotros"]=false;
+            $salida["productos"]=false;
+            $salida["marcas"]=false;
+            $salida["contacto"]=false;
+            $salida["slider_textos"]=true;
+            $salida["slider"]=$this->Slider_textos_model->get_slider();
+            $salida["marcas_cargadas"]=$this->Marcas_model->get_marcas();
+            $salida= $this->configuraciones($salida);
+            $this->load->view('header_home', $salida);
+            $this->load->view('marcas', $salida);
+            $this->load->view('footer');
 	}
+        public function nosotros()
+	{
+            $salida["title"]="Districart";
+            $salida["home"]=false;
+            $salida["nosotros"]=true;
+            $salida["productos"]=false;
+            $salida["marcas"]=false;
+            $salida["contacto"]=false;
+            $salida["slider_textos"]=false;
+            $salida= $this->configuraciones($salida);
+            $this->load->view('header_home', $salida);
+            $this->load->view('nosotros', $salida);
+            $this->load->view('footer');
+	}
+        public function productos()
+	{
+            $salida["title"]="Districart";
+            $salida["home"]=false;
+            $salida["nosotros"]=false;
+            $salida["productos"]=true;
+            $salida["marcas"]=false;
+            $salida["contacto"]=false;
+            $salida["slider_textos"]=false;
+            $salida= $this->configuraciones($salida);
+            $this->load->view('header_home', $salida);
+            $this->load->view('productos', $salida);
+            $this->load->view('footer');
+	}
+        public function marcas()
+	{
+            $salida["title"]="Districart";
+            $salida["home"]=false;
+            $salida["nosotros"]=false;
+            $salida["productos"]=false;
+            $salida["marcas"]=true;
+            $salida["contacto"]=false;
+            $salida["slider_textos"]=false;
+            $salida= $this->configuraciones($salida);
+            $salida["marcas_cargadas"]=$this->Marcas_model->get_marcas();
+            $this->load->view('header_home', $salida);
+            $this->load->view('marcas', $salida);
+            $this->load->view('footer');
+	}
+        public function contacto()
+	{
+            $salida["title"]="Districart";
+            $salida["home"]=false;
+            $salida["nosotros"]=false;
+            $salida["productos"]=false;
+            $salida["marcas"]=false;
+            $salida["contacto"]=true;
+            $salida["slider_textos"]=false;
+            $salida= $this->configuraciones($salida);
+            $this->load->view('header_home', $salida);
+            $this->load->view('contacto', $salida);
+            $this->load->view('footer');
+	}
+        
+        private function configuraciones($datos){
+            //datos buenos aires
+            $datos["bad"]= $this->Configuracion_empresa_model->get_configuracion(1);
+            $datos["bat"]= $this->Configuracion_empresa_model->get_configuracion(2);
+            $datos["bac"]= $this->Configuracion_empresa_model->get_configuracion(3);
+            //datos cordoba
+            $datos["cd"]= $this->Configuracion_empresa_model->get_configuracion(4);
+            $datos["ct"]= $this->Configuracion_empresa_model->get_configuracion(5);
+            $datos["cc"]= $this->Configuracion_empresa_model->get_configuracion(6);
+            //redes sociales
+            $datos["tw"]= $this->Configuracion_empresa_model->get_configuracion(7);
+            $datos["fac"]= $this->Configuracion_empresa_model->get_configuracion(8);
+            $datos["gmas"]= $this->Configuracion_empresa_model->get_configuracion(9);
+            $datos["lk"]= $this->Configuracion_empresa_model->get_configuracion(10);
+            
+            return $datos;
+            
+        }
 }
